@@ -19,6 +19,7 @@
 		2FCFBE0D2B50126700837C0B /* SplashAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE0C2B50126700837C0B /* SplashAssembly.swift */; };
 		2FCFBE0F2B5012D400837C0B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE0E2B5012D400837C0B /* BaseViewController.swift */; };
 		2FCFBE152B50143E00837C0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FCFBE132B50143E00837C0B /* LaunchScreen.storyboard */; };
+		2FCFBE182B50165E00837C0B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE172B50165E00837C0B /* UIColor+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		2FCFBE0C2B50126700837C0B /* SplashAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashAssembly.swift; sourceTree = "<group>"; };
 		2FCFBE0E2B5012D400837C0B /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		2FCFBE142B50143E00837C0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2FCFBE172B50165E00837C0B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 		2FCFBE162B50156300837C0B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				2FCFBE172B50165E00837C0B /* UIColor+Extension.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				2FCFBDFF2B500F6600837C0B /* AppCoordinator.swift in Sources */,
 				2FCFBE0D2B50126700837C0B /* SplashAssembly.swift in Sources */,
 				2FCFBE0B2B50124A00837C0B /* SplashCoordinator.swift in Sources */,
+				2FCFBE182B50165E00837C0B /* UIColor+Extension.swift in Sources */,
 				2FCFBE032B500FCB00837C0B /* Assembly.swift in Sources */,
 				2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */,
 				2FCFBE0F2B5012D400837C0B /* BaseViewController.swift in Sources */,

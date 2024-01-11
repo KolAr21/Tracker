@@ -12,7 +12,18 @@ protocol SplashView: UIView {
 }
 
 final class SplashViewImp: UIView, SplashView {
+    lazy var logoImageView: UIImageView = {
+        UIImageView(image: UIImage(named: "Logo"))
+    }()
+
     func setView() {
-        backgroundColor = .red
+        backgroundColor = .trackerBlue
+
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(logoImageView)
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 }
