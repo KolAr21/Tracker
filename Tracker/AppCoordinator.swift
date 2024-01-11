@@ -14,5 +14,18 @@ final class AppCoordinator: BaseCoordinator<CoordinatorContext> {
 
     func start(window: UIWindow?) {
         self.window = window
+        let coordinator = assembly.splashCoordinator()
+        setRoot(viewController: coordinator.make())
+    }
+
+    // MARK: - Private methods
+
+    private func setRoot(viewController: UIViewController?) {
+        guard let window, let viewController else {
+            return
+        }
+
+        window.rootViewController = viewController
+        window.makeKeyAndVisible()
     }
 }
