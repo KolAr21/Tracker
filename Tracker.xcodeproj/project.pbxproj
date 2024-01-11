@@ -68,6 +68,7 @@
 		2FCFBDE72B4FE3A400837C0B /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				2FCFBE162B50156300837C0B /* Extension */,
 				2FCFBE042B50116700837C0B /* Modules */,
 				2FCFBE102B5012FB00837C0B /* Common */,
 				2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */,
@@ -107,6 +108,13 @@
 				2FCFBE0E2B5012D400837C0B /* BaseViewController.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		2FCFBE162B50156300837C0B /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
