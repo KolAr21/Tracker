@@ -8,16 +8,16 @@
 import UIKit
 
 protocol SplashAssembly {
-    func splashCoordinator() -> SplashCoordinator
-    func splashVC() -> SplashViewController<SplashViewImp>
+    func splashCoordinator(onSuccess: (() -> Void)?) -> SplashCoordinator
+    func splashVC(onSuccess: (() -> Void)?) -> SplashViewController<SplashViewImp>
 }
 
 extension Assembly: SplashAssembly {
-    func splashCoordinator() -> SplashCoordinator {
-        SplashCoordinator(assembly: self, context: .init())
+    func splashCoordinator(onSuccess: (() -> Void)?) -> SplashCoordinator {
+        SplashCoordinator(assembly: self, context: .init(onSuccess: onSuccess))
     }
 
-    func splashVC() -> SplashViewController<SplashViewImp> {
-        .init()
+    func splashVC(onSuccess: (() -> Void)?) -> SplashViewController<SplashViewImp> {
+        .init(onSuccess: onSuccess)
     }
 }

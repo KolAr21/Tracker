@@ -8,9 +8,11 @@
 import UIKit
 
 final class SplashCoordinator: BaseCoordinator<SplashCoordinator.Context> {
-    struct Context {}
+    struct Context {
+        let onSuccess: (() -> Void)?
+    }
 
     override func make() -> UIViewController? {
-        assembly.splashVC()
+        assembly.splashVC(onSuccess: context.onSuccess)
     }
 }

@@ -11,4 +11,14 @@ final class Assembly {
     func appCoordinator() -> AppCoordinator {
         AppCoordinator(assembly: self, context: CoordinatorContext())
     }
+
+    func rootTabBarController() -> UITabBarController {
+        TabBarController()
+    }
+
+    func rootNavigationController() -> UINavigationController {
+        let controller = UINavigationController()
+        controller.modalPresentationStyle = .fullScreen
+        return controller
+    }
 }
