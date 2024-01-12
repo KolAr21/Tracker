@@ -26,6 +26,10 @@
 		2FCFBE222B5192B000837C0B /* TrackersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE212B5192B000837C0B /* TrackersCoordinator.swift */; };
 		2FCFBE242B5192DC00837C0B /* TrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE232B5192DC00837C0B /* TrackersView.swift */; };
 		2FCFBE262B5192FE00837C0B /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE252B5192FE00837C0B /* TrackersViewController.swift */; };
+		2FCFBE292B519FB100837C0B /* StatisticAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE282B519FB100837C0B /* StatisticAssembly.swift */; };
+		2FCFBE2B2B519FD400837C0B /* StatisticCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE2A2B519FD400837C0B /* StatisticCoordinator.swift */; };
+		2FCFBE2D2B519FED00837C0B /* StatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE2C2B519FED00837C0B /* StatisticView.swift */; };
+		2FCFBE2F2B51A01700837C0B /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE2E2B51A01700837C0B /* StatisticViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +54,10 @@
 		2FCFBE212B5192B000837C0B /* TrackersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCoordinator.swift; sourceTree = "<group>"; };
 		2FCFBE232B5192DC00837C0B /* TrackersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersView.swift; sourceTree = "<group>"; };
 		2FCFBE252B5192FE00837C0B /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		2FCFBE282B519FB100837C0B /* StatisticAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticAssembly.swift; sourceTree = "<group>"; };
+		2FCFBE2A2B519FD400837C0B /* StatisticCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCoordinator.swift; sourceTree = "<group>"; };
+		2FCFBE2C2B519FED00837C0B /* StatisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticView.swift; sourceTree = "<group>"; };
+		2FCFBE2E2B51A01700837C0B /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +108,7 @@
 		2FCFBE042B50116700837C0B /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2FCFBE272B519F7A00837C0B /* Statistic */,
 				2FCFBE1E2B51927400837C0B /* Trackers */,
 				2FCFBE052B50117800837C0B /* Splash */,
 			);
@@ -152,6 +161,17 @@
 				2FCFBE252B5192FE00837C0B /* TrackersViewController.swift */,
 			);
 			name = Trackers;
+			sourceTree = "<group>";
+		};
+		2FCFBE272B519F7A00837C0B /* Statistic */ = {
+			isa = PBXGroup;
+			children = (
+				2FCFBE282B519FB100837C0B /* StatisticAssembly.swift */,
+				2FCFBE2E2B51A01700837C0B /* StatisticViewController.swift */,
+				2FCFBE2C2B519FED00837C0B /* StatisticView.swift */,
+				2FCFBE2A2B519FD400837C0B /* StatisticCoordinator.swift */,
+			);
+			name = Statistic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,6 +244,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FCFBE292B519FB100837C0B /* StatisticAssembly.swift in Sources */,
+				2FCFBE2D2B519FED00837C0B /* StatisticView.swift in Sources */,
 				2FCFBDFF2B500F6600837C0B /* AppCoordinator.swift in Sources */,
 				2FCFBE1D2B5191DC00837C0B /* TabBarController.swift in Sources */,
 				2FCFBE0D2B50126700837C0B /* SplashAssembly.swift in Sources */,
@@ -235,7 +257,9 @@
 				2FCFBE242B5192DC00837C0B /* TrackersView.swift in Sources */,
 				2FCFBE0F2B5012D400837C0B /* BaseViewController.swift in Sources */,
 				2FCFBE1B2B51907400837C0B /* RootTab.swift in Sources */,
+				2FCFBE2B2B519FD400837C0B /* StatisticCoordinator.swift in Sources */,
 				2FCFBE072B5011D800837C0B /* SplashViewController.swift in Sources */,
+				2FCFBE2F2B51A01700837C0B /* StatisticViewController.swift in Sources */,
 				2FCFBE202B51929200837C0B /* TrackersAssembly.swift in Sources */,
 				2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */,
 				2FCFBE222B5192B000837C0B /* TrackersCoordinator.swift in Sources */,

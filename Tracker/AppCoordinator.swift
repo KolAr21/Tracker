@@ -25,15 +25,17 @@ final class AppCoordinator: BaseCoordinator<CoordinatorContext> {
     private func setTabVC() {
         let tabVC = assembly.rootTabBarController()
         let trackerCoordinator = assembly.trackerCoordinator()
+        let statisticCoordinator = assembly.statisticCoordinator()
 
-        guard let trackerVC = trackerCoordinator.make() else {
+        guard let trackerVC = trackerCoordinator.make(), let statisticVC = statisticCoordinator.make() else {
             return
         }
 
         let navVC = assembly.rootNavigationController()
         navVC.setViewControllers([trackerVC], animated: false)
         navVC.tabBarItem = RootTab.tracker.tabBarItem
-        tabVC.setViewControllers([navVC], animated: false)
+        statisticVC.tabBarItem = RootTab.statistic.tabBarItem
+        tabVC.setViewControllers([navVC, statisticVC], animated: false)
         setRoot(viewController: tabVC)
     }
 
