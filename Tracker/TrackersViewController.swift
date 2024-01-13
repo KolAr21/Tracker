@@ -40,6 +40,8 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         ]
     }
 
+    // MARK: - Private methods
+
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()

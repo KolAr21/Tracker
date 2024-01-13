@@ -31,6 +31,7 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
         let button = UIButton()
         button.setTitle("Привычка", for: .normal)
         setSettingsButton(button: button)
+        button.addTarget(self, action: #selector(openNewHabit), for: .touchUpInside)
         return button
     }()
 
@@ -61,28 +62,25 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
 
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
-        NSLayoutConstraint.activate([
-            habitButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        NSLayoutConstraint.activate([
-            eventButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+            habitButton.heightAnchor.constraint(equalToConstant: 60),
+
+            eventButton.heightAnchor.constraint(equalToConstant: 60),
+
             buttonsStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         ])
-
-        habitButton.addTarget(self, action: #selector(openNewHabit), for: .touchUpInside)
     }
+
+    // MARK: - Private methods
 
     private func setSettingsButton(button: UIButton) {
         button.backgroundColor = .trackerBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.titleLabel?.textColor = .trackerWhite
+        button.setTitleColor(.trackerWhite, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
     }
 

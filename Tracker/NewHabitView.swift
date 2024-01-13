@@ -8,10 +8,18 @@
 import UIKit
 
 protocol NewHabitView: UIView {
+    var delegate: NewHabitViewDelegate? { get set }
     func setView()
 }
 
+protocol NewHabitViewDelegate: AnyObject {
+    func didTapScheduleButton()
+    func didTapCancelButton()
+}
+
 final class NewHabitViewImp: UIView, NewHabitView {
+    weak var delegate: NewHabitViewDelegate?
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -49,12 +57,48 @@ final class NewHabitViewImp: UIView, NewHabitView {
         return tableView
     }()
 
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .trackerWhite
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.trackerRed.cgColor
+        button.layer.cornerRadius = 16
+        button.setTitleColor(.trackerRed, for: .normal)
+        button.setTitle("Отменить", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var createButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .trackerGray
+        button.layer.cornerRadius = 16
+        button.setTitleColor(.trackerWhite, for: .normal)
+        button.setTitle("Создать", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        return button
+    }()
+
+    private lazy var buttonsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.horizontal
+        stackView.distribution = UIStackView.Distribution.fillEqually
+        stackView.alignment = UIStackView.Alignment.fill
+        stackView.spacing = 8
+        stackView.addArrangedSubview(cancelButton)
+        stackView.addArrangedSubview(createButton)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     func setView() {
         backgroundColor = .trackerWhite
 
         addSubview(titleLabel)
         addSubview(nameHabitTextField)
         addSubview(tableView)
+        addSubview(buttonsStackView)
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -69,12 +113,19 @@ final class NewHabitViewImp: UIView, NewHabitView {
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             tableView.topAnchor.constraint(equalTo: nameHabitTextField.bottomAnchor, constant: 24),
             tableView.heightAnchor.constraint(equalToConstant: 150),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+
+            buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -34),
+            buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
 
         tableView.dataSource = self
         tableView.delegate = self
     }
+
+    // MARK: - Private methods
 
     private func setSettingsButton(button: UIButton) {
         button.setImage(UIImage(named: "Arrow"), for: .normal)
@@ -84,7 +135,13 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16
     }
+
+    @objc private func didTapCancelButton() {
+        delegate?.didTapCancelButton()
+    }
 }
+
+// MARK: - UITableViewDataSource
 
 extension NewHabitViewImp: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,13 +159,23 @@ extension NewHabitViewImp: UITableViewDataSource {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
             cell.label.text = "Категория"
         }
-        cell.label.text = indexPath.row == 1 ? "Категория" : "Расписание"
+        cell.label.text = indexPath.row == 1 ? "Расписание" : "Категория"
         return cell
     }
 }
 
+// MARK: - UITableViewDelegate
+
 extension NewHabitViewImp: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         75
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.row == 1 else {
+            return
+        }
+        delegate?.didTapScheduleButton()
     }
 }

@@ -11,6 +11,14 @@ final class NewHabitCoordinator: BaseCoordinator<NewHabitCoordinator.Context> {
     struct Context {}
 
     override func make() -> UIViewController? {
-        assembly.newHabitVC()
+        let controller = assembly.newHabitVC()
+        controller.onOpenSchedule = { [weak controller] in
+            let coordinator = self.assembly.scheduleCoordinator()
+            guard let scheduleVC = coordinator.make() else {
+                return
+            }
+            controller?.present(scheduleVC, animated: true)
+        }
+        return controller
     }
 }

@@ -1,13 +1,13 @@
 //
-//  NewHabitTableViewCell.swift
+//  ScheduleTableViewCell.swift
 //  Tracker
 //
-//  Created by Арина Колганова on 13.01.2024.
+//  Created by Арина Колганова on 14.01.2024.
 //
 
 import UIKit
 
-final class NewHabitTableViewCell: UITableViewCell {
+final class ScheduleTableViewCell: UITableViewCell {
     lazy var label: UILabel = {
         let label = UILabel()
         label.textColor = .trackerBlack
@@ -15,8 +15,10 @@ final class NewHabitTableViewCell: UITableViewCell {
         return label
     }()
 
-    private lazy var image: UIImageView = {
-        UIImageView(image: UIImage(named: "Arrow"))
+    private lazy var switcher: UISwitch = {
+        let switcher = UISwitch()
+        switcher.onTintColor = .trackerBlue
+        return switcher
     }()
 
     private lazy var stackView: UIStackView = {
@@ -26,14 +28,13 @@ final class NewHabitTableViewCell: UITableViewCell {
         stackView.alignment = UIStackView.Alignment.fill
         stackView.spacing = 0
         stackView.addArrangedSubview(label)
-        stackView.addArrangedSubview(image)
+        stackView.addArrangedSubview(switcher)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: "NewHabitCell")
-
+        super.init(style: .subtitle, reuseIdentifier: "ScheduleCell")
         backgroundColor = .trackerBackground
 
         contentView.addSubview(stackView)

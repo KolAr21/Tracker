@@ -18,6 +18,8 @@ final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewContro
     }
 }
 
+// MARK: - CreateTrackerViewDelegate
+
 extension CreateTrackerViewController: CreateTrackerViewDelegate {
     func openNewHabit() {
         openNewHabbit?()

@@ -20,6 +20,7 @@ final class TrackersViewImp: UIView, TrackersView {
             collectionViewLayout: UICollectionViewFlowLayout()
         )
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
 
@@ -50,27 +51,24 @@ final class TrackersViewImp: UIView, TrackersView {
         backgroundColor = .trackerWhite
 
         addSubview(placeholderStackView)
+        addSubview(collectionView)
+
         NSLayoutConstraint.activate([
             placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
+            placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-        setupCollectionView()
-    }
-
-    private func setupCollectionView() {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(collectionView)
-        NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+
         collectionView.dataSource = self
         collectionView.delegate = self
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension TrackersViewImp: UICollectionViewDataSource {
     func collectionView(
@@ -94,6 +92,8 @@ extension TrackersViewImp: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+
 extension TrackersViewImp: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 
@@ -105,6 +105,8 @@ extension TrackersViewImp: UICollectionViewDelegate {
         UIEdgeInsets(top: 16.0, left: params.leftInset, bottom: 20.0, right: params.rightInset)
     }
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension TrackersViewImp: UICollectionViewDelegateFlowLayout {
     func collectionView(
