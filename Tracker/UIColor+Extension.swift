@@ -13,4 +13,5 @@ extension UIColor {
     static var trackerWhite: UIColor { UIColor(named: "White") ?? UIColor.white }
     static var trackerBlack: UIColor { UIColor(named: "Black") ?? UIColor.black }
     static var trackerOrange: UIColor { UIColor(named: "Orange") ?? UIColor.orange }
+    static var trackerBackground: UIColor { UIColor(named: "Background") ?? UIColor.lightGray }
 }

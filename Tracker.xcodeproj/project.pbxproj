@@ -40,6 +40,11 @@
 		2FCFBE432B52AD8100837C0B /* CreateTrackerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE422B52AD8100837C0B /* CreateTrackerCoordinator.swift */; };
 		2FCFBE452B52AD8A00837C0B /* CreateTrackerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE442B52AD8A00837C0B /* CreateTrackerAssembly.swift */; };
 		2FCFBE472B52AD9000837C0B /* CreateTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE462B52AD9000837C0B /* CreateTrackerView.swift */; };
+		2FCFBE4C2B52C69C00837C0B /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE4B2B52C69C00837C0B /* NewHabitViewController.swift */; };
+		2FCFBE4E2B52C6A700837C0B /* NewHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE4D2B52C6A700837C0B /* NewHabitView.swift */; };
+		2FCFBE502B52C6B300837C0B /* NewHabitAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE4F2B52C6B300837C0B /* NewHabitAssembly.swift */; };
+		2FCFBE522B52C6CA00837C0B /* NewHabitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE512B52C6CA00837C0B /* NewHabitCoordinator.swift */; };
+		2FCFBE542B52D77100837C0B /* NewHabitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE532B52D77100837C0B /* NewHabitTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +83,11 @@
 		2FCFBE422B52AD8100837C0B /* CreateTrackerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerCoordinator.swift; sourceTree = "<group>"; };
 		2FCFBE442B52AD8A00837C0B /* CreateTrackerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerAssembly.swift; sourceTree = "<group>"; };
 		2FCFBE462B52AD9000837C0B /* CreateTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerView.swift; sourceTree = "<group>"; };
+		2FCFBE4B2B52C69C00837C0B /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
+		2FCFBE4D2B52C6A700837C0B /* NewHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitView.swift; sourceTree = "<group>"; };
+		2FCFBE4F2B52C6B300837C0B /* NewHabitAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitAssembly.swift; sourceTree = "<group>"; };
+		2FCFBE512B52C6CA00837C0B /* NewHabitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitCoordinator.swift; sourceTree = "<group>"; };
+		2FCFBE532B52D77100837C0B /* NewHabitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +139,7 @@
 		2FCFBE042B50116700837C0B /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2FCFBE4A2B52C67A00837C0B /* NewHabit */,
 				2FCFBE3F2B52ACAB00837C0B /* CreateTracker */,
 				2FCFBE272B519F7A00837C0B /* Statistic */,
 				2FCFBE1E2B51927400837C0B /* Trackers */,
@@ -220,6 +231,18 @@
 			path = CreateTracker;
 			sourceTree = "<group>";
 		};
+		2FCFBE4A2B52C67A00837C0B /* NewHabit */ = {
+			isa = PBXGroup;
+			children = (
+				2FCFBE4B2B52C69C00837C0B /* NewHabitViewController.swift */,
+				2FCFBE4D2B52C6A700837C0B /* NewHabitView.swift */,
+				2FCFBE532B52D77100837C0B /* NewHabitTableViewCell.swift */,
+				2FCFBE4F2B52C6B300837C0B /* NewHabitAssembly.swift */,
+				2FCFBE512B52C6CA00837C0B /* NewHabitCoordinator.swift */,
+			);
+			name = NewHabit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -298,6 +321,8 @@
 				2FCFBE0D2B50126700837C0B /* SplashAssembly.swift in Sources */,
 				2FCFBE0B2B50124A00837C0B /* SplashCoordinator.swift in Sources */,
 				2FCFBE322B51A08A00837C0B /* Tracker.swift in Sources */,
+				2FCFBE4C2B52C69C00837C0B /* NewHabitViewController.swift in Sources */,
+				2FCFBE502B52C6B300837C0B /* NewHabitAssembly.swift in Sources */,
 				2FCFBE182B50165E00837C0B /* UIColor+Extension.swift in Sources */,
 				2FCFBE032B500FCB00837C0B /* Assembly.swift in Sources */,
 				2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */,
@@ -310,6 +335,7 @@
 				2FCFBE342B51A09300837C0B /* TrackerCategory.swift in Sources */,
 				2FCFBE2B2B519FD400837C0B /* StatisticCoordinator.swift in Sources */,
 				2FCFBE072B5011D800837C0B /* SplashViewController.swift in Sources */,
+				2FCFBE522B52C6CA00837C0B /* NewHabitCoordinator.swift in Sources */,
 				2FCFBE362B51A09E00837C0B /* TrackerRecord.swift in Sources */,
 				2FCFBE432B52AD8100837C0B /* CreateTrackerCoordinator.swift in Sources */,
 				2FCFBE2F2B51A01700837C0B /* StatisticViewController.swift in Sources */,
@@ -319,7 +345,9 @@
 				2FCFBE3E2B529ACB00837C0B /* BaseNavigationController.swift in Sources */,
 				2FCFBE012B500FAC00837C0B /* BaseCoordinator.swift in Sources */,
 				2FCFBE412B52AD5B00837C0B /* CreateTrackerViewController.swift in Sources */,
+				2FCFBE4E2B52C6A700837C0B /* NewHabitView.swift in Sources */,
 				2FCFBE092B50122B00837C0B /* SplashView.swift in Sources */,
+				2FCFBE542B52D77100837C0B /* NewHabitTableViewCell.swift in Sources */,
 				2FCFBE3C2B52827C00837C0B /* GeometricParams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

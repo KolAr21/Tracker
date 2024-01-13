@@ -8,10 +8,17 @@
 import UIKit
 
 protocol CreateTrackerView: UIView {
+    var delegate: CreateTrackerViewDelegate? { get set }
     func setView()
 }
 
+protocol CreateTrackerViewDelegate: AnyObject {
+    func openNewHabit()
+}
+
 final class CreateTrackerViewImp: UIView, CreateTrackerView {
+    weak var delegate: CreateTrackerViewDelegate?
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -67,6 +74,8 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
             buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
         ])
+
+        habitButton.addTarget(self, action: #selector(openNewHabit), for: .touchUpInside)
     }
 
     private func setSettingsButton(button: UIButton) {
@@ -75,5 +84,9 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.titleLabel?.textColor = .trackerWhite
         button.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    @objc private func openNewHabit(sender: UIButton!) {
+        delegate?.openNewHabit()
     }
 }

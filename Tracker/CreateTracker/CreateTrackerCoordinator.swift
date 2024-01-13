@@ -11,6 +11,14 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
     struct Context {}
 
     override func make() -> UIViewController? {
-        assembly.createTrackerVC()
+        let controller = assembly.createTrackerVC()
+        controller.openNewHabbit = { [weak controller] in
+            let coordinator = self.assembly.newHabitCoordinator()
+            guard let createTrackerVC = coordinator.make() else {
+                return
+            }
+            controller?.present(createTrackerVC, animated: true)
+        }
+        return controller
     }
 }

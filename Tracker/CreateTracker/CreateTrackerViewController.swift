@@ -8,9 +8,18 @@
 import UIKit
 
 final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewController<View> {
+    var openNewHabbit: (() -> Void)?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        rootView.delegate = self
         rootView.setView()
+    }
+}
+
+extension CreateTrackerViewController: CreateTrackerViewDelegate {
+    func openNewHabit() {
+        openNewHabbit?()
     }
 }
