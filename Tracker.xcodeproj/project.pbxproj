@@ -33,6 +33,8 @@
 		2FCFBE322B51A08A00837C0B /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE312B51A08A00837C0B /* Tracker.swift */; };
 		2FCFBE342B51A09300837C0B /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE332B51A09300837C0B /* TrackerCategory.swift */; };
 		2FCFBE362B51A09E00837C0B /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */; };
+		2FCFBE3A2B51A51400837C0B /* TrackerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE392B51A51400837C0B /* TrackerCollectionViewCell.swift */; };
+		2FCFBE3C2B52827C00837C0B /* GeometricParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE3B2B52827C00837C0B /* GeometricParams.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +66,8 @@
 		2FCFBE312B51A08A00837C0B /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		2FCFBE332B51A09300837C0B /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
+		2FCFBE392B51A51400837C0B /* TrackerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCollectionViewCell.swift; sourceTree = "<group>"; };
+		2FCFBE3B2B52827C00837C0B /* GeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricParams.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +169,7 @@
 				2FCFBE1F2B51929200837C0B /* TrackersAssembly.swift */,
 				2FCFBE212B5192B000837C0B /* TrackersCoordinator.swift */,
 				2FCFBE232B5192DC00837C0B /* TrackersView.swift */,
+				2FCFBE392B51A51400837C0B /* TrackerCollectionViewCell.swift */,
 				2FCFBE252B5192FE00837C0B /* TrackersViewController.swift */,
 			);
 			name = Trackers;
@@ -187,6 +192,7 @@
 				2FCFBE312B51A08A00837C0B /* Tracker.swift */,
 				2FCFBE332B51A09300837C0B /* TrackerCategory.swift */,
 				2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */,
+				2FCFBE3B2B52827C00837C0B /* GeometricParams.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -273,6 +279,7 @@
 				2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */,
 				2FCFBE262B5192FE00837C0B /* TrackersViewController.swift in Sources */,
 				2FCFBE242B5192DC00837C0B /* TrackersView.swift in Sources */,
+				2FCFBE3A2B51A51400837C0B /* TrackerCollectionViewCell.swift in Sources */,
 				2FCFBE0F2B5012D400837C0B /* BaseViewController.swift in Sources */,
 				2FCFBE1B2B51907400837C0B /* RootTab.swift in Sources */,
 				2FCFBE342B51A09300837C0B /* TrackerCategory.swift in Sources */,
@@ -285,6 +292,7 @@
 				2FCFBE222B5192B000837C0B /* TrackersCoordinator.swift in Sources */,
 				2FCFBE012B500FAC00837C0B /* BaseCoordinator.swift in Sources */,
 				2FCFBE092B50122B00837C0B /* SplashView.swift in Sources */,
+				2FCFBE3C2B52827C00837C0B /* GeometricParams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,8 +436,7 @@
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,9 +444,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.KolAr.Tracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -455,8 +465,7 @@
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -464,9 +473,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.KolAr.Tracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

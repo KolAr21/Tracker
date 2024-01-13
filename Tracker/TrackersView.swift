@@ -12,18 +12,29 @@ protocol TrackersView: UIView {
 }
 
 final class TrackersViewImp: UIView, TrackersView {
-    lazy var placeholderImageView: UIImageView = {
+    private let params: GeometricParams = GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 10)
+
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewFlowLayout()
+        )
+        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        return collectionView
+    }()
+
+    private lazy var placeholderImageView: UIImageView = {
         UIImageView(image: UIImage(named: "PlaceholderTracker"))
     }()
 
-    lazy var placeholderLabel: UILabel = {
+    private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
 
-    lazy var placeholderStackView: UIStackView = {
+    private lazy var placeholderStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.vertical
         stackView.distribution = UIStackView.Distribution.equalSpacing
@@ -42,5 +53,74 @@ final class TrackersViewImp: UIView, TrackersView {
             placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+
+        setupCollectionView()
+    }
+
+    private func setupCollectionView() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        collectionView.dataSource = self
+        collectionView.delegate = self
+    }
+}
+
+extension TrackersViewImp: UICollectionViewDataSource {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return Int(params.cellSpacing)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "Cell",
+            for: indexPath
+        ) as? TrackerCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        return cell
+    }
+}
+
+extension TrackersViewImp: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        UIEdgeInsets(top: 16.0, left: params.leftInset, bottom: 20.0, right: params.rightInset)
+    }
+}
+
+extension TrackersViewImp: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let availableWidth = collectionView.frame.width - params.paddingWidth
+        let cellWidth =  availableWidth / CGFloat(params.cellCount)
+        return CGSize(width: cellWidth, height: 148)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return params.cellSpacing
     }
 }
