@@ -71,7 +71,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     private lazy var doneButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "DoneTracker"), for: .normal)
+        button.setImage(UIImage(named: "PlusTracker"), for: .normal)
         button.tintColor = .trackerOrange
         return button
     }()
