@@ -73,6 +73,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "PlusTracker"), for: .normal)
         button.tintColor = .trackerOrange
+        button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         return button
     }()
 
@@ -124,5 +125,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc private func didTapDoneButton(sender: UIButton!) {
+        sender.setImage(UIImage(named: "DoneTracker"), for: .normal)
     }
 }
