@@ -11,6 +11,14 @@ final class TrackersCoordinator: BaseCoordinator<TrackersCoordinator.Context> {
     struct Context {}
 
     override func make() -> UIViewController? {
-        assembly.trackerVC()
+        let controller = assembly.trackerVC()
+        controller.openCreateTracker = { [weak controller] in
+            let coordinator = self.assembly.createTrackerCoordinator()
+            guard let createTrackerVC = coordinator.make() else {
+                return
+            }
+            controller?.present(createTrackerVC, animated: true)
+        }
+        return controller
     }
 }

@@ -42,12 +42,13 @@ final class TrackersViewImp: UIView, TrackersView {
         stackView.spacing = 8
         stackView.addArrangedSubview(placeholderImageView)
         stackView.addArrangedSubview(placeholderLabel)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
     func setView() {
         backgroundColor = .trackerWhite
-        placeholderStackView.translatesAutoresizingMaskIntoConstraints = false
+
         addSubview(placeholderStackView)
         NSLayoutConstraint.activate([
             placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),

@@ -8,6 +8,7 @@
 import UIKit
 
 final class TrackersViewController<View: TrackersView>: BaseViewController<View> {
+    var openCreateTracker: (() -> Void)?
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
 
@@ -21,7 +22,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     private func setupBar() {
         let rectInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         let addButtonImage = UIImage(named: "AddTracker")?.withAlignmentRectInsets(rectInsets)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: addButtonImage, style: .plain, target: self, action: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: addButtonImage, style: .plain, target: self, action: #selector(createNewTracker))
 
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
@@ -45,5 +46,9 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         dateFormatter.dateFormat = "dd.MM.yyyy"
         let formattedDate = dateFormatter.string(from: selectedDate)
         print("Выбранная дата: \(formattedDate)")
+    }
+
+    @objc private func createNewTracker() {
+        openCreateTracker?()
     }
 }
