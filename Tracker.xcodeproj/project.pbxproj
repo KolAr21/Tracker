@@ -35,6 +35,7 @@
 		2FCFBE362B51A09E00837C0B /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */; };
 		2FCFBE3A2B51A51400837C0B /* TrackerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE392B51A51400837C0B /* TrackerCollectionViewCell.swift */; };
 		2FCFBE3C2B52827C00837C0B /* GeometricParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE3B2B52827C00837C0B /* GeometricParams.swift */; };
+		2FCFBE3E2B529ACB00837C0B /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBE3D2B529ACB00837C0B /* BaseNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		2FCFBE392B51A51400837C0B /* TrackerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCollectionViewCell.swift; sourceTree = "<group>"; };
 		2FCFBE3B2B52827C00837C0B /* GeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricParams.swift; sourceTree = "<group>"; };
+		2FCFBE3D2B529ACB00837C0B /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,8 +109,8 @@
 				2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */,
 				2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */,
 				2FCFBDFE2B500F6600837C0B /* AppCoordinator.swift */,
-				2FCFBE302B51A07700837C0B /* Models */,
 				2FCFBE022B500FCB00837C0B /* Assembly.swift */,
+				2FCFBE302B51A07700837C0B /* Models */,
 				2FCFBDF12B4FE3A500837C0B /* Assets.xcassets */,
 				2FCFBDF62B4FE3A500837C0B /* Info.plist */,
 				2FCFBE132B50143E00837C0B /* LaunchScreen.storyboard */,
@@ -143,6 +145,7 @@
 				2FCFBE002B500FAC00837C0B /* BaseCoordinator.swift */,
 				2FCFBE0E2B5012D400837C0B /* BaseViewController.swift */,
 				2FCFBE1C2B5191DC00837C0B /* TabBarController.swift */,
+				2FCFBE3D2B529ACB00837C0B /* BaseNavigationController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				2FCFBE202B51929200837C0B /* TrackersAssembly.swift in Sources */,
 				2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */,
 				2FCFBE222B5192B000837C0B /* TrackersCoordinator.swift in Sources */,
+				2FCFBE3E2B529ACB00837C0B /* BaseNavigationController.swift in Sources */,
 				2FCFBE012B500FAC00837C0B /* BaseCoordinator.swift in Sources */,
 				2FCFBE092B50122B00837C0B /* SplashView.swift in Sources */,
 				2FCFBE3C2B52827C00837C0B /* GeometricParams.swift in Sources */,

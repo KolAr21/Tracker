@@ -17,7 +17,7 @@ final class Assembly {
     }
 
     func rootNavigationController() -> UINavigationController {
-        let controller = UINavigationController()
+        let controller = BaseNavigationController()
         controller.modalPresentationStyle = .fullScreen
         return controller
     }
