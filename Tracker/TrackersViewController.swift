@@ -19,6 +19,8 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         rootView.setView()
     }
 
+    // MARK: - Private methods
+
     private func setupBar() {
         let rectInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         let addButtonImage = UIImage(named: "AddTracker")?.withAlignmentRectInsets(rectInsets)
@@ -35,12 +37,10 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         title = RootTab.tracker.tabBarItem.title
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [
-            .foregroundColor: UIColor(named: "black") ?? .black,
+            .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 34, weight: .bold)
         ]
     }
-
-    // MARK: - Private methods
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date

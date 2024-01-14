@@ -12,5 +12,17 @@ final class ScheduleViewController<View: ScheduleView>: BaseViewController<View>
         super.viewDidLoad()
 
         rootView.setView()
+
+        setupBar()
+    }
+
+    // MARK: - Private methods
+
+    private func setupBar() {
+        title = "Расписание"
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.trackerBlack,
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium)
+        ]
     }
 }

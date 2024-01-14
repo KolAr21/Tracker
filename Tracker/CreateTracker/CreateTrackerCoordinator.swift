@@ -14,10 +14,12 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
         let controller = assembly.createTrackerVC()
         controller.openNewHabbit = { [weak controller] in
             let coordinator = self.assembly.newHabitCoordinator()
-            guard let createTrackerVC = coordinator.make() else {
+            guard let newHabitVC = coordinator.make() else {
                 return
             }
-            controller?.present(createTrackerVC, animated: true)
+            let navVC = self.assembly.rootNavigationController()
+            navVC.setViewControllers([newHabitVC], animated: false)
+            controller?.present(navVC, animated: true)
         }
         return controller
     }

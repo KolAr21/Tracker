@@ -17,7 +17,9 @@ final class NewHabitCoordinator: BaseCoordinator<NewHabitCoordinator.Context> {
             guard let scheduleVC = coordinator.make() else {
                 return
             }
-            controller?.present(scheduleVC, animated: true)
+            let navVC = self.assembly.rootNavigationController()
+            navVC.setViewControllers([scheduleVC], animated: false)
+            controller?.present(navVC, animated: true)
         }
         return controller
     }

@@ -19,14 +19,6 @@ protocol CreateTrackerViewDelegate: AnyObject {
 final class CreateTrackerViewImp: UIView, CreateTrackerView {
     weak var delegate: CreateTrackerViewDelegate?
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Создание трекера"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     private lazy var habitButton: UIButton = {
         let button = UIButton()
         button.setTitle("Привычка", for: .normal)
@@ -57,13 +49,9 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
     func setView() {
         backgroundColor = .trackerWhite
 
-        addSubview(titleLabel)
         addSubview(buttonsStackView)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-
             habitButton.heightAnchor.constraint(equalToConstant: 60),
 
             eventButton.heightAnchor.constraint(equalToConstant: 60),

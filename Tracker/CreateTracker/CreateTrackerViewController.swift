@@ -15,6 +15,18 @@ final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewContro
 
         rootView.delegate = self
         rootView.setView()
+
+        setupBar()
+    }
+
+    // MARK: - Private methods
+
+    private func setupBar() {
+        title = "Создание трекера"
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.trackerBlack,
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium)
+        ]
     }
 }
 

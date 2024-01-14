@@ -15,6 +15,18 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
 
         rootView.setView()
         rootView.delegate = self
+
+        setupBar()
+    }
+
+    // MARK: - Private methods
+
+    private func setupBar() {
+        title = "Новая привычка"
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.trackerBlack,
+            .font: UIFont.systemFont(ofSize: 16, weight: .medium)
+        ]
     }
 }
 

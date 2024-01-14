@@ -17,7 +17,9 @@ final class TrackersCoordinator: BaseCoordinator<TrackersCoordinator.Context> {
             guard let createTrackerVC = coordinator.make() else {
                 return
             }
-            controller?.present(createTrackerVC, animated: true)
+            let navVC = self.assembly.rootNavigationController()
+            navVC.setViewControllers([createTrackerVC], animated: false)
+            controller?.present(navVC, animated: false)
         }
         return controller
     }

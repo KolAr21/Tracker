@@ -12,15 +12,6 @@ protocol ScheduleView: UIView {
 }
 
 final class ScheduleViewImp: UIView, ScheduleView {
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Расписание"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: "ScheduleCell")
@@ -46,17 +37,12 @@ final class ScheduleViewImp: UIView, ScheduleView {
     func setView() {
         backgroundColor = .trackerWhite
 
-        addSubview(titleLabel)
         addSubview(tableView)
         addSubview(doneButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            tableView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -134),
 
@@ -122,5 +108,9 @@ extension ScheduleViewImp: UITableViewDataSource {
 extension ScheduleViewImp: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         75
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

@@ -20,15 +20,6 @@ protocol NewHabitViewDelegate: AnyObject {
 final class NewHabitViewImp: UIView, NewHabitView {
     weak var delegate: NewHabitViewDelegate?
 
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Новая привычка"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
         textField.attributedPlaceholder = NSAttributedString(
@@ -95,18 +86,13 @@ final class NewHabitViewImp: UIView, NewHabitView {
     func setView() {
         backgroundColor = .trackerWhite
 
-        addSubview(titleLabel)
         addSubview(nameHabitTextField)
         addSubview(tableView)
         addSubview(buttonsStackView)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-
             nameHabitTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            nameHabitTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            nameHabitTextField.topAnchor.constraint(equalTo: topAnchor, constant: 24),
             nameHabitTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             nameHabitTextField.heightAnchor.constraint(equalToConstant: 75),
 
