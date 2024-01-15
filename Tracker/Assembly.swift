@@ -8,6 +8,8 @@
 import UIKit
 
 final class Assembly {
+    lazy var trackerService: TrackersService = TrackersServiceImp()
+
     func appCoordinator() -> AppCoordinator {
         AppCoordinator(assembly: self, context: CoordinatorContext())
     }
@@ -16,7 +18,7 @@ final class Assembly {
         TabBarController()
     }
 
-    func rootNavigationController() -> UINavigationController {
-        BaseNavigationController()
+    func rootNavigationController(vc: UIViewController) -> UINavigationController {
+        BaseNavigationController(rootViewController: vc)
     }
 }

@@ -8,15 +8,39 @@
 import UIKit
 
 final class TrackersViewController<View: TrackersView>: BaseViewController<View> {
+    var categories: [TrackerCategory] = [] //Оно здесь только ради чеклиста
     var openCreateTracker: (() -> Void)?
-    var categories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
+
+    private var categoriesObserver: NSObjectProtocol?
+
+    let trackerService: TrackersService
+
+    init(trackerService: TrackersService) {
+        self.trackerService = trackerService
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupBar()
+        rootView.trackerService = trackerService
         rootView.setView()
+
+        setupBar()
+
+        categoriesObserver = NotificationCenter.default.addObserver(
+            forName: TrackersServiceImp.DidChangeCategoriesNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.rootView.reloadData()
+            }
     }
 
     // MARK: - Private methods

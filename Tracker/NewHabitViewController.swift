@@ -9,12 +9,23 @@ import UIKit
 
 final class NewHabitViewController<View: NewHabitView>: BaseViewController<View> {
     var onOpenSchedule: (() -> Void)?
+    var trackerService: TrackersService
+
+    init(trackerService: TrackersService) {
+        self.trackerService = trackerService
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         rootView.setView()
         rootView.delegate = self
+        rootView.trackerService = trackerService
 
         setupBar()
     }
@@ -22,6 +33,7 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
     // MARK: - Private methods
 
     private func setupBar() {
+        navigationItem.hidesBackButton = true
         title = "Новая привычка"
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
@@ -38,6 +50,10 @@ extension NewHabitViewController: NewHabitViewDelegate {
     }
 
     func didTapCancelButton() {
+        dismiss(animated: true)
+    }
+
+    func didTapCreateHabitButton() {
         dismiss(animated: true)
     }
 }

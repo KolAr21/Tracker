@@ -17,9 +17,7 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
             guard let newHabitVC = coordinator.make() else {
                 return
             }
-            let navVC = self.assembly.rootNavigationController()
-            navVC.setViewControllers([newHabitVC], animated: false)
-            controller?.present(navVC, animated: true)
+            controller?.navigationController?.pushViewController(newHabitVC, animated: true)
         }
         return controller
     }

@@ -18,6 +18,6 @@ extension Assembly: NewHabitAssembly {
     }
 
     func newHabitVC() -> NewHabitViewController<NewHabitViewImp> {
-        .init()
+        .init(trackerService: trackerService)
     }
 }

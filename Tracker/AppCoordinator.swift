@@ -31,9 +31,7 @@ final class AppCoordinator: BaseCoordinator<CoordinatorContext> {
             return
         }
 
-        let navVC = assembly.rootNavigationController()
-        navVC.modalPresentationStyle = .fullScreen
-        navVC.setViewControllers([trackerVC], animated: false)
+        let navVC = assembly.rootNavigationController(vc: trackerVC)
         navVC.tabBarItem = RootTab.tracker.tabBarItem
         statisticVC.tabBarItem = RootTab.statistic.tabBarItem
         tabVC.setViewControllers([navVC, statisticVC], animated: false)

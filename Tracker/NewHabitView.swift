@@ -8,17 +8,21 @@
 import UIKit
 
 protocol NewHabitView: UIView {
+    var trackerService: TrackersService? { get set }
     var delegate: NewHabitViewDelegate? { get set }
+
     func setView()
 }
 
 protocol NewHabitViewDelegate: AnyObject {
     func didTapScheduleButton()
     func didTapCancelButton()
+    func didTapCreateHabitButton()
 }
 
 final class NewHabitViewImp: UIView, NewHabitView {
     weak var delegate: NewHabitViewDelegate?
+    var trackerService: TrackersService?
 
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
@@ -30,6 +34,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         )
         textField.layer.cornerRadius = 16
         textField.backgroundColor = .trackerBackground
+        textField.returnKeyType = .go
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
@@ -68,6 +73,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.setTitleColor(.trackerWhite, for: .normal)
         button.setTitle("Создать", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(didTapCreateHabitButton), for: .touchUpInside)
         return button
     }()
 
@@ -124,6 +130,14 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     @objc private func didTapCancelButton() {
         delegate?.didTapCancelButton()
+    }
+
+    @objc private func didTapCreateHabitButton() {
+        let category = ""
+        let newTracker = Tracker(id: 0, name: "nameHabitTextField.text", color: .trackerRed, emoji: "😪", schedule: "")
+        let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
+        trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
+        delegate?.didTapCreateHabitButton()
     }
 }
 

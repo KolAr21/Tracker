@@ -8,6 +8,16 @@
 import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
+    var trackerService: TrackersService?
+    var tracker: Tracker = Tracker(id: 0, name: "", color: .trackerRed, emoji: "", schedule: "")
+
+    lazy var isDone: Bool = {
+        guard let _ = trackerService?.completedTrackers.first(where: { $0.id == tracker.id }) else {
+            return false
+        }
+        return true
+    }()
+
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "😻"
@@ -74,6 +84,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         button.setImage(UIImage(named: "PlusTracker"), for: .normal)
         button.tintColor = .trackerOrange
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        button.layer.cornerRadius = 17
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
@@ -107,6 +119,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             topView.trailingAnchor.constraint(equalTo: trailingAnchor),
             topView.heightAnchor.constraint(equalToConstant: 90),
 
+            doneButton.widthAnchor.constraint(equalToConstant: 34),
+            doneButton.heightAnchor.constraint(equalToConstant: 34),
+
             topStackView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 12),
             topStackView.topAnchor.constraint(equalTo: topView.topAnchor, constant: 12),
             topStackView.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -12),
@@ -126,6 +141,21 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     // MARK: - Private methods
 
     @objc private func didTapDoneButton(sender: UIButton!) {
-        sender.setImage(UIImage(named: "DoneTracker"), for: .normal)
+        if !isDone {
+            let image = UIImage(named: "DoneTracker")?.withTintColor(.trackerWhite)
+            sender.setImage(image, for: .normal)
+            sender.tintColor = .trackerWhite
+            sender.layer.backgroundColor = UIColor.trackerOrange.withAlphaComponent(0.3).cgColor
+
+            trackerService?.appendCompletedTracker(newTracker: TrackerRecord(id: 0, date: Date()))
+            isDone = !isDone
+        } else {
+            sender.setImage(UIImage(named: "PlusTracker"), for: .normal)
+            sender.tintColor = .trackerOrange
+            sender.layer.backgroundColor = UIColor.clear.cgColor
+
+            trackerService?.removeCompletedTracker(cell: tracker.id)
+            isDone = !isDone
+        }
     }
 }

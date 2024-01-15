@@ -8,17 +8,22 @@
 import UIKit
 
 protocol TrackersView: UIView {
+    var trackerService: TrackersService? { get set }
+    var collectionView: UICollectionView { get set }
+
     func setView()
+    func reloadData()
 }
 
 final class TrackersViewImp: UIView, TrackersView {
-    private let params: GeometricParams = GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 10)
+    var trackerService: TrackersService?
 
-    private lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewFlowLayout()
         )
+        collectionView.backgroundColor = .clear
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -49,33 +54,45 @@ final class TrackersViewImp: UIView, TrackersView {
 
     func setView() {
         backgroundColor = .trackerWhite
+        collectionView.dataSource = self
+        collectionView.delegate = self
 
-        addSubview(placeholderStackView)
+        if (trackerService?.categories.isEmpty) != nil {
+            addSubview(placeholderStackView)
+
+            NSLayoutConstraint.activate([
+                placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            ])
+        }
         addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
 
-        collectionView.dataSource = self
-        collectionView.delegate = self
+    func reloadData() {
+        placeholderStackView.isHidden = ((trackerService?.categories.isEmpty) != nil)
+        collectionView.reloadData()
     }
 }
 
 // MARK: - UICollectionViewDataSource
 
 extension TrackersViewImp: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        trackerService?.categories.count ?? 0
+    }
+
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return Int(params.cellSpacing)
+        trackerService?.categories[section].trackersList.count ?? 0
     }
 
     func collectionView(
@@ -88,6 +105,7 @@ extension TrackersViewImp: UICollectionViewDataSource {
         ) as? TrackerCollectionViewCell else {
             return UICollectionViewCell()
         }
+        cell.trackerService = trackerService
         return cell
     }
 }
@@ -102,7 +120,7 @@ extension TrackersViewImp: UICollectionViewDelegate {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        UIEdgeInsets(top: 16.0, left: params.leftInset, bottom: 20.0, right: params.rightInset)
+        UIEdgeInsets(top: 16.0, left: 16.0, bottom: 20.0, right: 16.0)
     }
 }
 
@@ -114,8 +132,8 @@ extension TrackersViewImp: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let availableWidth = collectionView.frame.width - params.paddingWidth
-        let cellWidth =  availableWidth / CGFloat(params.cellCount)
+        let availableWidth = collectionView.frame.width - 42
+        let cellWidth =  availableWidth / 2
         return CGSize(width: cellWidth, height: 148)
     }
 
@@ -124,6 +142,6 @@ extension TrackersViewImp: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return params.cellSpacing
+        10
     }
 }

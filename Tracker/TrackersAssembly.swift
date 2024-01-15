@@ -18,6 +18,6 @@ extension Assembly: TrackersAssembly {
     }
 
     func trackerVC() -> TrackersViewController<TrackersViewImp> {
-        .init()
+        .init(trackerService: trackerService)
     }
 }
