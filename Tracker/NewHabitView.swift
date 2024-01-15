@@ -133,7 +133,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
     }
 
     @objc private func didTapCreateHabitButton() {
-        let category = ""
+        let category = "Радостные мелочи"
         let newTracker = Tracker(id: 0, name: "nameHabitTextField.text", color: .trackerRed, emoji: "😪", schedule: "")
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
