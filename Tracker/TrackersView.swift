@@ -111,6 +111,17 @@ extension TrackersViewImp: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.trackerService = trackerService
+        guard let tracker = trackerService?.categories[indexPath.section].trackersList[indexPath.row] else {
+            print("///////")
+            return cell
+        }
+        cell.setTracker(newTracker: Tracker(
+            id: tracker.id,
+            name: tracker.name,
+            color: tracker.color,
+            emoji: tracker.emoji,
+            schedule: tracker.schedule
+        ))
         return cell
     }
 

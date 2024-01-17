@@ -125,7 +125,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     @objc private func didTapCreateHabitButton() {
         let category = "Радостные мелочи"
-        let newTracker = Tracker(id: 0, name: "nameHabitTextField.text", color: .trackerRed, emoji: "😪", schedule: "")
+        let newTracker = Tracker(id: 0, name: "Кошка заслонила камеру на созвоне", color: .trackerRed, emoji: "😻", schedule: "5 дней")
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
         delegate?.didTapCancelButton()

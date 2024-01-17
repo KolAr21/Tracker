@@ -9,10 +9,10 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     var trackerService: TrackersService?
-    var tracker: Tracker = Tracker(id: 0, name: "", color: .trackerRed, emoji: "", schedule: "")
+    private var tracker: Tracker?
 
     lazy var isDone: Bool = {
-        guard let _ = trackerService?.completedTrackers.first(where: { $0.id == tracker.id }) else {
+        guard let _ = trackerService?.completedTrackers.first(where: { $0.id == tracker?.id }) else {
             return false
         }
         return true
@@ -20,7 +20,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
-        label.text = "😻"
         label.font = label.font.withSize(14)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,12 +40,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 2
         label.textColor = .trackerWhite
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.15
-        label.attributedText = NSMutableAttributedString(
-            string: "Кошка заслонила камеру на созвоне",
-            attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
-        )
         return label
     }()
 
@@ -73,7 +66,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
-        label.text = "5 day"
         label.textColor = .trackerBlack
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
@@ -138,9 +130,24 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func setTracker(newTracker: Tracker) {
+        tracker = newTracker
+        emojiLabel.text = newTracker.emoji
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.15
+        trackerLabel.attributedText = NSMutableAttributedString(
+            string: newTracker.name,
+            attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        )
+        dayLabel.text = newTracker.schedule
+    }
+
     // MARK: - Private methods
 
     @objc private func didTapDoneButton(sender: UIButton!) {
+        guard let tracker else {
+            return
+        }
         if !isDone {
             let image = UIImage(named: "DoneTracker")?.withTintColor(.trackerWhite)
             sender.setImage(image, for: .normal)
