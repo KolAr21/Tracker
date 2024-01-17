@@ -55,17 +55,6 @@ final class ScheduleViewImp: UIView, ScheduleView {
         tableView.dataSource = self
         tableView.delegate = self
     }
-
-    // MARK: - Private method
-
-    private func setSettingsButton(button: UIButton) {
-        button.setImage(UIImage(named: "Arrow"), for: .normal)
-        button.backgroundColor = .trackerBackground
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.setTitleColor(.trackerBlack, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 16
-    }
 }
 
 // MARK: - UITableViewDataSource

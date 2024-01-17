@@ -58,7 +58,6 @@ final class TrackersViewImp: UIView, TrackersView {
     }()
 
     func setView() {
-        print(collectionView)
         backgroundColor = .trackerWhite
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -84,7 +83,6 @@ final class TrackersViewImp: UIView, TrackersView {
     func reloadData() {
         placeholderStackView.isHidden = ((trackerService?.categories.isEmpty) != nil)
         collectionView.reloadData()
-        print(collectionView)
     }
 }
 

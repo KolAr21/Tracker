@@ -9,6 +9,7 @@ import UIKit
 
 final class NewHabitViewController<View: NewHabitView>: BaseViewController<View> {
     var onOpenSchedule: (() -> Void)?
+    var onOpenCategory: (() -> Void)?
     var trackerService: TrackersService
 
     init(trackerService: TrackersService) {
@@ -49,11 +50,11 @@ extension NewHabitViewController: NewHabitViewDelegate {
         onOpenSchedule?()
     }
 
-    func didTapCancelButton() {
-        dismiss(animated: true)
+    func didTapCategoryButton() {
+        onOpenCategory?()
     }
 
-    func didTapCreateHabitButton() {
+    func didTapCancelButton() {
         dismiss(animated: true)
     }
 }

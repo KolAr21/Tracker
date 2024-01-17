@@ -16,8 +16,8 @@ protocol NewHabitView: UIView {
 
 protocol NewHabitViewDelegate: AnyObject {
     func didTapScheduleButton()
+    func didTapCategoryButton()
     func didTapCancelButton()
-    func didTapCreateHabitButton()
 }
 
 final class NewHabitViewImp: UIView, NewHabitView {
@@ -119,15 +119,6 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     // MARK: - Private methods
 
-    private func setSettingsButton(button: UIButton) {
-        button.setImage(UIImage(named: "Arrow"), for: .normal)
-        button.backgroundColor = .trackerBackground
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.setTitleColor(.trackerBlack, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 16
-    }
-
     @objc private func didTapCancelButton() {
         delegate?.didTapCancelButton()
     }
@@ -137,7 +128,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         let newTracker = Tracker(id: 0, name: "nameHabitTextField.text", color: .trackerRed, emoji: "😪", schedule: "")
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
-        delegate?.didTapCreateHabitButton()
+        delegate?.didTapCancelButton()
     }
 }
 
@@ -174,6 +165,7 @@ extension NewHabitViewImp: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard indexPath.row == 1 else {
+            delegate?.didTapCategoryButton()
             return
         }
         delegate?.didTapScheduleButton()

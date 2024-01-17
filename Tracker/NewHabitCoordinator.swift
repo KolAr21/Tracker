@@ -20,6 +20,14 @@ final class NewHabitCoordinator: BaseCoordinator<NewHabitCoordinator.Context> {
             let navVC = self.assembly.rootNavigationController(vc: scheduleVC)
             controller?.navigationController?.present(navVC, animated: true)
         }
+        controller.onOpenCategory = { [weak controller] in
+            let coordinator = self.assembly.categoryCoordinator()
+            guard let categoryVC = coordinator.make() else {
+                return
+            }
+            let navVC = self.assembly.rootNavigationController(vc: categoryVC)
+            controller?.navigationController?.present(navVC, animated: true)
+        }
         return controller
     }
 }
