@@ -67,6 +67,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 
         let search = UISearchController(searchResultsController: nil)
         navigationItem.searchController = search
+        navigationItem.searchController?.searchBar.placeholder = "Поиск"
 
     }
 
