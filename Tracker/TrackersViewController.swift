@@ -28,10 +28,10 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupBar()
+
         rootView.trackerService = trackerService
         rootView.setView()
-
-        setupBar()
 
         categoriesObserver = NotificationCenter.default.addObserver(
             forName: TrackersServiceImp.DidChangeCategoriesNotification,
@@ -64,6 +64,10 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 34, weight: .bold)
         ]
+
+        let search = UISearchController(searchResultsController: nil)
+        navigationItem.searchController = search
+
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {

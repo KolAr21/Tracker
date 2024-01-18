@@ -62,22 +62,23 @@ final class TrackersViewImp: UIView, TrackersView {
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        if (trackerService?.categories.isEmpty) != nil {
-            addSubview(placeholderStackView)
-
-            NSLayoutConstraint.activate([
-                placeholderStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                placeholderStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            ])
-        }
         addSubview(collectionView)
 
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
+
+        if (trackerService?.categories.isEmpty) != nil {
+            addSubview(placeholderStackView)
+
+            NSLayoutConstraint.activate([
+                placeholderStackView.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+                placeholderStackView.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor),
+            ])
+        }
     }
 
     func reloadData() {
