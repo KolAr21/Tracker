@@ -18,7 +18,7 @@ final class ScheduleViewImp: UIView, ScheduleView {
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.separatorColor = .trackerGray
-        tableView.layer.cornerRadius = 16
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 0))
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -74,6 +74,8 @@ extension ScheduleViewImp: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             cell.label.text = "Понедельник"
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         case 1:
             cell.label.text = "Вторник"
         case 2:
@@ -87,6 +89,8 @@ extension ScheduleViewImp: UITableViewDataSource {
         default:
             cell.label.text = "Воскресенье"
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
         return cell
     }
