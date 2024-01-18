@@ -71,7 +71,6 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         let formattedDate = dateFormatter.string(from: selectedDate)
-        print("Выбранная дата: \(formattedDate)")
     }
 
     @objc private func createNewTracker() {

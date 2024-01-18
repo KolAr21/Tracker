@@ -112,7 +112,6 @@ extension TrackersViewImp: UICollectionViewDataSource {
         }
         cell.trackerService = trackerService
         guard let tracker = trackerService?.categories[indexPath.section].trackersList[indexPath.row] else {
-            print("///////")
             return cell
         }
         cell.setTracker(newTracker: Tracker(
