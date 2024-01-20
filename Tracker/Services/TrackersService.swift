@@ -10,10 +10,12 @@ import Foundation
 protocol TrackersService {
     var categories: [TrackerCategory] { get set }
     var completedTrackers: [TrackerRecord] { get set }
+    var weekdaysDictionary: [String: Bool] { get set }
 
     func appendCompletedTracker(newTracker: TrackerRecord)
     func removeCompletedTracker(cell indexPath: UInt)
     func updateCategoriesList(categoryTracker: TrackerCategory)
+    func updateWeekdays(newWeekdayDictionary: [String: Bool])
 }
 
 final class TrackersServiceImp: TrackersService {
@@ -21,6 +23,7 @@ final class TrackersServiceImp: TrackersService {
 
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
+    var weekdaysDictionary: [String: Bool] = [:]
 
     func appendCompletedTracker(newTracker: TrackerRecord) {
         completedTrackers.append(newTracker)
@@ -51,5 +54,9 @@ final class TrackersServiceImp: TrackersService {
         newCategories.append(TrackerCategory(title: categoryTracker.title, trackersList: trackerListCategory))
         categories = newCategories
         NotificationCenter.default.post(name: TrackersServiceImp.DidChangeCategoriesNotification, object: self)
+    }
+
+    func updateWeekdays(newWeekdayDictionary: [String: Bool]) {
+        weekdaysDictionary = newWeekdayDictionary
     }
 }

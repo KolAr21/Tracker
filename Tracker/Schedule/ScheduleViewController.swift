@@ -8,9 +8,23 @@
 import UIKit
 
 final class ScheduleViewController<View: ScheduleView>: BaseViewController<View> {
+    private let trackerService: TrackersService
+
+    init(trackerService: TrackersService) {
+        self.trackerService = trackerService
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        rootView.delegate = self
+        rootView.trackerService = trackerService
         rootView.setView()
 
         setupBar()
@@ -24,5 +38,11 @@ final class ScheduleViewController<View: ScheduleView>: BaseViewController<View>
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)
         ]
+    }
+}
+
+extension ScheduleViewController: ScheduleViewDelegate {
+    func dismissVC() {
+        dismiss(animated: true)
     }
 }

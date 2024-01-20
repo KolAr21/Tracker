@@ -15,7 +15,7 @@ final class ScheduleTableViewCell: UITableViewCell {
         return label
     }()
 
-    private lazy var switcher: UISwitch = {
+    lazy var switcher: UISwitch = {
         let switcher = UISwitch()
         switcher.onTintColor = .trackerBlue
         return switcher

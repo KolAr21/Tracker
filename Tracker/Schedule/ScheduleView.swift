@@ -8,10 +8,22 @@
 import UIKit
 
 protocol ScheduleView: UIView {
+    var trackerService: TrackersService? { get set }
+    var delegate: ScheduleViewDelegate? { get set }
     func setView()
 }
 
+protocol ScheduleViewDelegate: AnyObject {
+    func dismissVC()
+}
+
 final class ScheduleViewImp: UIView, ScheduleView {
+    var trackerService: TrackersService?
+    var delegate: ScheduleViewDelegate?
+
+    private var weekdays = Calendar.current.weekdaySymbols
+    private var weekdaySwitch: [String: Bool] = [:]
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: "ScheduleCell")
@@ -30,11 +42,15 @@ final class ScheduleViewImp: UIView, ScheduleView {
         button.setTitleColor(.trackerWhite, for: .normal)
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     func setView() {
+        let sunday = weekdays.remove(at: 0)
+        weekdays.append(sunday)
+
         backgroundColor = .trackerWhite
 
         addSubview(tableView)
@@ -55,6 +71,18 @@ final class ScheduleViewImp: UIView, ScheduleView {
         tableView.dataSource = self
         tableView.delegate = self
     }
+
+    @objc private func didTapDoneButton() {
+        for row in 0..<tableView.numberOfRows(inSection: 0) {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ScheduleTableViewCell else {
+                return
+            }
+
+            weekdaySwitch[weekdays[row]] = cell.switcher.isOn
+        }
+        trackerService?.updateWeekdays(newWeekdayDictionary: weekdaySwitch)
+        delegate?.dismissVC()
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -71,26 +99,18 @@ extension ScheduleViewImp: UITableViewDataSource {
         ) as? ScheduleTableViewCell else {
             return UITableViewCell()
         }
+
+        cell.label.text = weekdays[indexPath.row].prefix(1).uppercased() + weekdays[indexPath.row].dropFirst()
+
         switch indexPath.row {
         case 0:
-            cell.label.text = "Понедельник"
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case 1:
-            cell.label.text = "Вторник"
-        case 2:
-            cell.label.text = "Среда"
-        case 3:
-            cell.label.text = "Четверг"
-        case 4:
-            cell.label.text = "Пятница"
-        case 5:
-            cell.label.text = "Суббота"
-        default:
-            cell.label.text = "Воскресенье"
+        case 6:
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        default: break
         }
         return cell
     }

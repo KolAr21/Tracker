@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FA5B7932B5927560050413B /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7922B5927560050413B /* WeekDay.swift */; };
 		2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */; };
 		2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */; };
 		2FCFBDF22B4FE3A500837C0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FCFBDF12B4FE3A500837C0B /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2FA5B7922B5927560050413B /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		2FCFBDE52B4FE3A400837C0B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				2FCFBE312B51A08A00837C0B /* Tracker.swift */,
 				2FCFBE332B51A09300837C0B /* TrackerCategory.swift */,
 				2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */,
+				2FA5B7922B5927560050413B /* WeekDay.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 				2FCFBE4E2B52C6A700837C0B /* NewHabitView.swift in Sources */,
 				2FCFBE092B50122B00837C0B /* SplashView.swift in Sources */,
 				2FCFBE542B52D77100837C0B /* NewHabitTableViewCell.swift in Sources */,
+				2FA5B7932B5927560050413B /* WeekDay.swift in Sources */,
 				2FCFBE592B53029600837C0B /* ScheduleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

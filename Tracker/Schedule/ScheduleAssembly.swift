@@ -18,6 +18,6 @@ extension Assembly: ScheduleAssembly {
     }
 
     func scheduleVC() -> ScheduleViewController<ScheduleViewImp> {
-        .init()
+        .init(trackerService: trackerService)
     }
 }

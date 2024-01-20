@@ -139,7 +139,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             string: newTracker.name,
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
-        dayLabel.text = newTracker.schedule
+        dayLabel.text = ""//newTracker.schedule
     }
 
     // MARK: - Private methods

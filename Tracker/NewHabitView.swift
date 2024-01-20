@@ -125,9 +125,14 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     @objc private func didTapCreateHabitButton() {
         let category = "Радостные мелочи"
-        let newTracker = Tracker(id: 0, name: "Кошка заслонила камеру на созвоне", color: .trackerRed, emoji: "😻", schedule: "5 дней")
+        let schedule = trackerService?.weekdaysDictionary.filter { $0.value == true }.map { $0.key }
+        guard let schedule else {
+            return
+        }
+        let newTracker = Tracker(id: 0, name: "Кошка заслонила камеру на созвоне", color: .trackerRed, emoji: "😻", schedule: schedule)
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
+        print(trackerCategory)
         delegate?.didTapCancelButton()
     }
 }

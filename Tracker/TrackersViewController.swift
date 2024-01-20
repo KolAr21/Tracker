@@ -28,6 +28,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        rootView.categoriesForView = trackerService.categories
         setupBar()
 
         rootView.trackerService = trackerService
@@ -39,6 +40,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
+                rootView.categoriesForView = trackerService.categories
                 self.rootView.reloadData()
             }
     }
@@ -65,8 +67,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
             .font: UIFont.systemFont(ofSize: 34, weight: .bold)
         ]
 
-        let search = UISearchController(searchResultsController: nil)
-        navigationItem.searchController = search
+        navigationItem.searchController = rootView.search
         navigationItem.searchController?.searchBar.placeholder = "Поиск"
 
     }
@@ -74,8 +75,23 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = "EEEE"
         let formattedDate = dateFormatter.string(from: selectedDate)
+//        rootView.categoriesForView = rootView.categoriesForView.filter { category in
+//            category.trackersList.filter { $0.schedule.contains(formattedDate) }
+//        }
+        var sortedCategories: [TrackerCategory] = []
+        for category in rootView.categoriesForView {
+            let sortedTrackerList = category.trackersList.filter { $0.schedule.contains(formattedDate) }
+            sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))
+        }
+        rootView.categoriesForView = sortedCategories
+
+        rootView.collectionView.reloadData()
+
+
+            //$0.trackersList.filter { $0.schedule.contains(formattedDate) } }
+
     }
 
     @objc private func createNewTracker() {

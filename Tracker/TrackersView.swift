@@ -9,6 +9,8 @@ import UIKit
 
 protocol TrackersView: UIView {
     var trackerService: TrackersService? { get set }
+    var categoriesForView: [TrackerCategory] { get set }
+    var search: UISearchController { get }
     var collectionView: UICollectionView { get set }
 
     func setView()
@@ -17,6 +19,13 @@ protocol TrackersView: UIView {
 
 final class TrackersViewImp: UIView, TrackersView {
     var trackerService: TrackersService?
+    var categoriesForView: [TrackerCategory] = []
+
+    var search: UISearchController {
+        let search = UISearchController(searchResultsController: nil)
+        search.delegate = self
+        return search
+    }
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
@@ -91,14 +100,16 @@ final class TrackersViewImp: UIView, TrackersView {
 
 extension TrackersViewImp: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        trackerService?.categories.count ?? 0
+        categoriesForView.count
+        //trackerService?.categories.count ?? 0
     }
 
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        trackerService?.categories[section].trackersList.count ?? 0
+        categoriesForView[section].trackersList.count
+        //trackerService?.categories[section].trackersList.count ?? 0
     }
 
     func collectionView(
@@ -112,9 +123,11 @@ extension TrackersViewImp: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.trackerService = trackerService
-        guard let tracker = trackerService?.categories[indexPath.section].trackersList[indexPath.row] else {
+
+        guard !categoriesForView.isEmpty/*let tracker = trackerService?.categories[indexPath.section].trackersList[indexPath.row]*/ else {
             return cell
         }
+        let tracker = categoriesForView[indexPath.section].trackersList[indexPath.row]
         cell.setTracker(newTracker: Tracker(
             id: tracker.id,
             name: tracker.name,
@@ -137,7 +150,7 @@ extension TrackersViewImp: UICollectionViewDataSource {
         ) as? TrackerCollectionHeaderView else {
             return UICollectionReusableView()
         }
-        headerView.titleLabel.text = trackerService?.categories[indexPath.section].title
+        headerView.titleLabel.text = categoriesForView[indexPath.section].title //trackerService?.categories[indexPath.section].title
         return headerView
     }
 }
@@ -180,4 +193,8 @@ extension TrackersViewImp: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         CGSize(width: collectionView.frame.width - 44, height: 42)
     }
+}
+
+extension TrackersViewImp: UISearchControllerDelegate {
+
 }
