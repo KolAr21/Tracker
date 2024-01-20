@@ -36,13 +36,13 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 
         categoriesObserver = NotificationCenter.default.addObserver(
             forName: TrackersServiceImp.DidChangeCategoriesNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                rootView.categoriesForView = trackerService.categories
-                self.rootView.reloadData()
-            }
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            rootView.categoriesForView = trackerService.categories
+            self.rootView.reloadData()
+        }
     }
 
     // MARK: - Private methods
@@ -75,11 +75,8 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         let selectedDate = sender.date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.dateFormat = "EE"
         let formattedDate = dateFormatter.string(from: selectedDate)
-//        rootView.categoriesForView = rootView.categoriesForView.filter { category in
-//            category.trackersList.filter { $0.schedule.contains(formattedDate) }
-//        }
         var sortedCategories: [TrackerCategory] = []
         for category in rootView.categoriesForView {
             let sortedTrackerList = category.trackersList.filter { $0.schedule.contains(formattedDate) }
@@ -87,11 +84,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         }
         rootView.categoriesForView = sortedCategories
 
-        rootView.collectionView.reloadData()
-
-
-            //$0.trackersList.filter { $0.schedule.contains(formattedDate) } }
-
+        rootView.reloadData()
     }
 
     @objc private func createNewTracker() {

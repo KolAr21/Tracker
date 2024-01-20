@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2FA5B7932B5927560050413B /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7922B5927560050413B /* WeekDay.swift */; };
+		2FA5B7952B5C149C0050413B /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */; };
 		2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */; };
 		2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */; };
 		2FCFBDF22B4FE3A500837C0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FCFBDF12B4FE3A500837C0B /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		2FA5B7922B5927560050413B /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
+		2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
 		2FCFBDE52B4FE3A400837C0B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				2FCFBE172B50165E00837C0B /* UIColor+Extension.swift */,
+				2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				2FCFBE202B51929200837C0B /* TrackersAssembly.swift in Sources */,
 				2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */,
 				2FCFBE222B5192B000837C0B /* TrackersCoordinator.swift in Sources */,
+				2FA5B7952B5C149C0050413B /* Calendar+Extension.swift in Sources */,
 				2FCFBE3E2B529ACB00837C0B /* BaseNavigationController.swift in Sources */,
 				2FCFBE012B500FAC00837C0B /* BaseCoordinator.swift in Sources */,
 				2FCFBE682B55723D00837C0B /* CategoryViewController.swift in Sources */,

@@ -9,6 +9,7 @@ import UIKit
 
 protocol CreateTrackerView: UIView {
     var delegate: CreateTrackerViewDelegate? { get set }
+
     func setView()
 }
 

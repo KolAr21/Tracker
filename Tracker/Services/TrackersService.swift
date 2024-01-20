@@ -10,20 +10,23 @@ import Foundation
 protocol TrackersService {
     var categories: [TrackerCategory] { get set }
     var completedTrackers: [TrackerRecord] { get set }
-    var weekdaysDictionary: [String: Bool] { get set }
+    var selectWeekdays: [String] { get set }
+    var selectCategory: String? { get set }
 
     func appendCompletedTracker(newTracker: TrackerRecord)
     func removeCompletedTracker(cell indexPath: UInt)
     func updateCategoriesList(categoryTracker: TrackerCategory)
-    func updateWeekdays(newWeekdayDictionary: [String: Bool])
+    func updateWeekdays(newSelectWeekdays: [String: Bool])
 }
 
 final class TrackersServiceImp: TrackersService {
     static let DidChangeCategoriesNotification = Notification.Name(rawValue: "CategoriesDidChange")
+    static let DidChangeSelectItemsNotification = Notification.Name(rawValue: "SelectItemDidChange")
 
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
-    var weekdaysDictionary: [String: Bool] = [:]
+    var selectWeekdays: [String] = []
+    var selectCategory: String? = "Baжное"
 
     func appendCompletedTracker(newTracker: TrackerRecord) {
         completedTrackers.append(newTracker)
@@ -56,7 +59,17 @@ final class TrackersServiceImp: TrackersService {
         NotificationCenter.default.post(name: TrackersServiceImp.DidChangeCategoriesNotification, object: self)
     }
 
-    func updateWeekdays(newWeekdayDictionary: [String: Bool]) {
-        weekdaysDictionary = newWeekdayDictionary
+    func updateWeekdays(newSelectWeekdays: [String: Bool]) {
+        let shortWeekdays = Calendar.sortedShortWeekdays()
+        var weekdays = Calendar.sortedWeekdays()
+        var newWeekdays: [String] = []
+
+        weekdays.enumerated().forEach { idx, day in
+            if newSelectWeekdays[day] == true {
+                newWeekdays.append(shortWeekdays[idx])
+            }
+        }
+        selectWeekdays = newWeekdays
+        NotificationCenter.default.post(name: TrackersServiceImp.DidChangeSelectItemsNotification, object: self)
     }
 }

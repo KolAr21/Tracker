@@ -8,24 +8,44 @@
 import UIKit
 
 final class NewHabitTableViewCell: UITableViewCell {
-    lazy var label: UILabel = {
+    lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .trackerBlack
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
 
+    lazy var selectLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .trackerGray
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        return label
+    }()
+
+    lazy var labelStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.distribution = UIStackView.Distribution.fillEqually
+        stackView.alignment = UIStackView.Alignment.fill
+        stackView.addArrangedSubview(nameLabel)
+        stackView.addArrangedSubview(selectLabel)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     private lazy var image: UIImageView = {
-        UIImageView(image: UIImage(named: "Arrow"))
+        let image = UIImageView(image: UIImage(named: "Arrow"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
 
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.distribution = UIStackView.Distribution.fill
-        stackView.alignment = UIStackView.Alignment.fill
-        stackView.spacing = 0
-        stackView.addArrangedSubview(label)
+        stackView.distribution = UIStackView.Distribution.equalSpacing
+        stackView.alignment = UIStackView.Alignment.center
+        stackView.spacing = 16
+        stackView.addArrangedSubview(labelStackView)
         stackView.addArrangedSubview(image)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView

@@ -10,6 +10,7 @@ import UIKit
 protocol ScheduleView: UIView {
     var trackerService: TrackersService? { get set }
     var delegate: ScheduleViewDelegate? { get set }
+
     func setView()
 }
 
@@ -21,7 +22,7 @@ final class ScheduleViewImp: UIView, ScheduleView {
     var trackerService: TrackersService?
     var delegate: ScheduleViewDelegate?
 
-    private var weekdays = Calendar.current.weekdaySymbols
+    private var weekdays = Calendar.sortedWeekdays()
     private var weekdaySwitch: [String: Bool] = [:]
 
     private lazy var tableView: UITableView = {
@@ -48,9 +49,6 @@ final class ScheduleViewImp: UIView, ScheduleView {
     }()
 
     func setView() {
-        let sunday = weekdays.remove(at: 0)
-        weekdays.append(sunday)
-
         backgroundColor = .trackerWhite
 
         addSubview(tableView)
@@ -77,10 +75,13 @@ final class ScheduleViewImp: UIView, ScheduleView {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ScheduleTableViewCell else {
                 return
             }
-
             weekdaySwitch[weekdays[row]] = cell.switcher.isOn
+//            if cell.switcher.isOn {
+//                weekdaySwitch.append(weekdays[row])
+//            }
         }
-        trackerService?.updateWeekdays(newWeekdayDictionary: weekdaySwitch)
+        print(weekdaySwitch)
+        trackerService?.updateWeekdays(newSelectWeekdays: weekdaySwitch)
         delegate?.dismissVC()
     }
 }

@@ -11,7 +11,6 @@ protocol TrackersView: UIView {
     var trackerService: TrackersService? { get set }
     var categoriesForView: [TrackerCategory] { get set }
     var search: UISearchController { get }
-    var collectionView: UICollectionView { get set }
 
     func setView()
     func reloadData()

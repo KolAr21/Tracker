@@ -10,8 +10,11 @@ import UIKit
 protocol NewHabitView: UIView {
     var trackerService: TrackersService? { get set }
     var delegate: NewHabitViewDelegate? { get set }
+    var selectSchedule: String? { get set }
+    var selectCategory: String? { get set }
 
     func setView()
+    func reloadData()
 }
 
 protocol NewHabitViewDelegate: AnyObject {
@@ -23,6 +26,8 @@ protocol NewHabitViewDelegate: AnyObject {
 final class NewHabitViewImp: UIView, NewHabitView {
     weak var delegate: NewHabitViewDelegate?
     var trackerService: TrackersService?
+    var selectSchedule: String?
+    var selectCategory: String?
 
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
@@ -90,6 +95,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
     }()
 
     func setView() {
+        selectCategory = trackerService?.selectCategory
         backgroundColor = .trackerWhite
 
         addSubview(nameHabitTextField)
@@ -117,6 +123,10 @@ final class NewHabitViewImp: UIView, NewHabitView {
         tableView.delegate = self
     }
 
+    func reloadData() {
+        tableView.reloadData()
+    }
+
     // MARK: - Private methods
 
     @objc private func didTapCancelButton() {
@@ -125,8 +135,8 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     @objc private func didTapCreateHabitButton() {
         let category = "Радостные мелочи"
-        let schedule = trackerService?.weekdaysDictionary.filter { $0.value == true }.map { $0.key }
-        guard let schedule else {
+//        let schedule = trackerService?.weekdaysDictionary.filter { $0.value == true }.map { $0.key }
+        guard let schedule = trackerService?.selectWeekdays else {
             return
         }
         let newTracker = Tracker(id: 0, name: "Кошка заслонила камеру на созвоне", color: .trackerRed, emoji: "😻", schedule: schedule)
@@ -153,9 +163,13 @@ extension NewHabitViewImp: UITableViewDataSource {
         }
         if indexPath.row == 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
-            cell.label.text = "Категория"
+            cell.selectLabel.isHidden = selectSchedule == nil ? true : false
+            cell.selectLabel.text = selectSchedule ?? ""
+        } else {
+            cell.selectLabel.isHidden = selectCategory == nil ? true : false
+            cell.selectLabel.text = selectCategory ?? ""
         }
-        cell.label.text = indexPath.row == 1 ? "Расписание" : "Категория"
+        cell.nameLabel.text = indexPath.row == 1 ? "Расписание" : "Категория"
         return cell
     }
 }

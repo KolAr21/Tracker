@@ -12,6 +12,8 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
     var onOpenCategory: (() -> Void)?
     var trackerService: TrackersService
 
+    private var itemsObserver: NSObjectProtocol?
+
     init(trackerService: TrackersService) {
         self.trackerService = trackerService
         super.init(nibName: nil, bundle: nil)
@@ -29,6 +31,19 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
         rootView.trackerService = trackerService
 
         setupBar()
+
+        itemsObserver = NotificationCenter.default.addObserver(
+            forName: TrackersServiceImp.DidChangeSelectItemsNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else {
+                return
+            }
+            self.rootView.selectCategory = trackerService.selectCategory
+            self.rootView.selectSchedule = trackerService.selectWeekdays.count == 7 ? "Каждый день" : trackerService.selectWeekdays.joined(separator: ", ")
+            self.rootView.reloadData()
+        }
     }
 
     // MARK: - Private methods
