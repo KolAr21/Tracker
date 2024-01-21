@@ -10,6 +10,7 @@ import Foundation
 protocol TrackersService {
     var categories: [TrackerCategory] { get set }
     var completedTrackers: [TrackerRecord] { get set }
+    var categoriesList: [String] { get set }
     var selectWeekdays: [String] { get set }
     var selectCategory: String? { get set }
 
@@ -17,6 +18,8 @@ protocol TrackersService {
     func removeCompletedTracker(cell indexPath: UInt)
     func updateCategoriesList(categoryTracker: TrackerCategory)
     func updateWeekdays(newSelectWeekdays: [String: Bool])
+    func updateSelectCategory(newSelectCategory: String)
+    func addCategory(newCategory: String)
 }
 
 final class TrackersServiceImp: TrackersService {
@@ -25,6 +28,7 @@ final class TrackersServiceImp: TrackersService {
 
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
+    var categoriesList: [String] = ["Baжное", "Неважное", "Тест"]
     var selectWeekdays: [String] = []
     var selectCategory: String? = "Baжное"
 
@@ -71,5 +75,13 @@ final class TrackersServiceImp: TrackersService {
         }
         selectWeekdays = newWeekdays
         NotificationCenter.default.post(name: TrackersServiceImp.DidChangeSelectItemsNotification, object: self)
+    }
+
+    func updateSelectCategory(newSelectCategory: String) {
+        selectCategory = newSelectCategory
+    }
+
+    func addCategory(newCategory: String) {
+        categoriesList.append(newCategory)
     }
 }

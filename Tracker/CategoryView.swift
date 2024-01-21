@@ -9,11 +9,18 @@ import UIKit
 
 protocol CategoryView: UIView {
     var trackerService: TrackersService? { get set }
+    var delegate: CategoryViewDelegate? { get set }
+
     func setView()
+}
+
+protocol CategoryViewDelegate: AnyObject {
+    func dismissVC()
 }
 
 final class CategoryViewImp: UIView, CategoryView {
     var trackerService: TrackersService?
+    var delegate: CategoryViewDelegate?
 
     private lazy var placeholderImageView: UIImageView = {
         UIImageView(image: UIImage(named: "PlaceholderTracker"))
@@ -42,11 +49,11 @@ final class CategoryViewImp: UIView, CategoryView {
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(ScheduleTableViewCell.self, forCellReuseIdentifier: "ScheduleCell")
+        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: "CategoryCell")
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 0))
         tableView.separatorColor = .trackerGray
-        tableView.layer.cornerRadius = 16
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -58,6 +65,7 @@ final class CategoryViewImp: UIView, CategoryView {
         button.setTitleColor(.trackerWhite, for: .normal)
         button.setTitle("Добавить категорию", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -68,7 +76,26 @@ final class CategoryViewImp: UIView, CategoryView {
         addSubview(tableView)
         addSubview(addButton)
 
-        if (trackerService?.categories.isEmpty) != nil {
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            tableView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+
+            addButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            addButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
+            addButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+
+        tableView.dataSource = self
+        tableView.delegate = self
+
+        guard let trackerService else {
+            return
+        }
+
+        if trackerService.categoriesList.isEmpty {
             addSubview(placeholderStackView)
 
             NSLayoutConstraint.activate([
@@ -78,12 +105,65 @@ final class CategoryViewImp: UIView, CategoryView {
                 placeholderStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             ])
         }
+    }
 
-        NSLayoutConstraint.activate([
-            addButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            addButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-            addButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
+    @objc private func addNewCategory() {
+
+    }
+}
+
+extension CategoryViewImp: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        trackerService?.categoriesList.count ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "CategoryCell",
+            for: indexPath
+        ) as? CategoryTableViewCell else {
+            return UITableViewCell()
+        }
+
+        guard let trackerService else {
+            return cell
+        }
+
+        switch indexPath.row {
+        case 0:
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case trackerService.categoriesList.count - 1:
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        default: break
+        }
+
+        cell.label.text = trackerService.categoriesList[indexPath.row]
+        if cell.label.text == trackerService.selectCategory {
+            cell.arrowImage.isHidden = false
+        } else {
+            cell.arrowImage.isHidden = true
+        }
+
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension CategoryViewImp: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        75
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let trackerService else {
+            return
+        }
+        trackerService.updateSelectCategory(newSelectCategory: trackerService.categoriesList[indexPath.row])
+        delegate?.dismissVC()
     }
 }

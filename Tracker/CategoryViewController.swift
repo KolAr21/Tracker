@@ -22,6 +22,7 @@ final class CategoryViewController<View: CategoryView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        rootView.delegate = self
         rootView.trackerService = trackerService
         rootView.setView()
 
@@ -36,5 +37,11 @@ final class CategoryViewController<View: CategoryView>: BaseViewController<View>
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)
         ]
+    }
+}
+
+extension CategoryViewController: CategoryViewDelegate {
+    func dismissVC() {
+        dismiss(animated: true)
     }
 }
