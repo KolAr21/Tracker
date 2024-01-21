@@ -40,11 +40,35 @@ final class NewHabitViewImp: UIView, NewHabitView {
         textField.layer.cornerRadius = 16
         textField.backgroundColor = .trackerBackground
         textField.returnKeyType = .go
+        textField.clearButtonMode = .whileEditing
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }()
+
+    private lazy var textFieldLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.textColor = .trackerRed
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    } ()
+
+    private lazy var textFieldStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.distribution = UIStackView.Distribution.fill
+        stackView.alignment = UIStackView.Alignment.fill
+        stackView.spacing = 8
+        stackView.addArrangedSubview(nameHabitTextField)
+        stackView.addArrangedSubview(textFieldLabel)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
 
     private lazy var tableView: UITableView = {
@@ -98,18 +122,19 @@ final class NewHabitViewImp: UIView, NewHabitView {
         selectCategory = trackerService?.selectCategory
         backgroundColor = .trackerWhite
 
-        addSubview(nameHabitTextField)
+        addSubview(textFieldStackView)
         addSubview(tableView)
         addSubview(buttonsStackView)
 
         NSLayoutConstraint.activate([
-            nameHabitTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            nameHabitTextField.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-            nameHabitTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            textFieldStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            textFieldStackView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+            textFieldStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             nameHabitTextField.heightAnchor.constraint(equalToConstant: 75),
+            textFieldLabel.bottomAnchor.constraint(equalTo: textFieldStackView.bottomAnchor, constant: -8),
 
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            tableView.topAnchor.constraint(equalTo: nameHabitTextField.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: textFieldStackView.bottomAnchor, constant: 24),
             tableView.heightAnchor.constraint(equalToConstant: 150),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
 
@@ -119,8 +144,13 @@ final class NewHabitViewImp: UIView, NewHabitView {
             buttonsStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
 
+        nameHabitTextField.delegate = self
+
         tableView.dataSource = self
         tableView.delegate = self
+
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
+        addGestureRecognizer(recognizer)
     }
 
     func reloadData() {
@@ -129,21 +159,55 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     // MARK: - Private methods
 
+    @objc private func viewDidTap() {
+        nameHabitTextField.resignFirstResponder()
+        guard let text = nameHabitTextField.text else {
+            textFieldLabel.isHidden = true
+            return
+        }
+
+        if text.count < 38 {
+            textFieldLabel.isHidden = true
+        }
+    }
+
     @objc private func didTapCancelButton() {
         delegate?.didTapCancelButton()
     }
 
     @objc private func didTapCreateHabitButton() {
         let category = "Радостные мелочи"
-//        let schedule = trackerService?.weekdaysDictionary.filter { $0.value == true }.map { $0.key }
         guard let schedule = trackerService?.selectWeekdays else {
             return
         }
         let newTracker = Tracker(id: 0, name: "Кошка заслонила камеру на созвоне", color: .trackerRed, emoji: "😻", schedule: schedule)
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)
-        print(trackerCategory)
         delegate?.didTapCancelButton()
+    }
+}
+
+extension NewHabitViewImp: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return false
+        }
+
+        if text.count >= 38 {
+            textFieldLabel.isHidden = false
+            return false
+        } else {
+            textFieldLabel.isHidden = true
+            return true
+        }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else {
+            return false
+        }
+
+        return text.count > 38 ? false : true
     }
 }
 
