@@ -7,9 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2FA5B7932B5927560050413B /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7922B5927560050413B /* WeekDay.swift */; };
+		2F6FA0BC2B70ED780037A525 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0BB2B70ED780037A525 /* Placeholder.swift */; };
+		2F6FA0BE2B7387810037A525 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0BD2B7387810037A525 /* NewCategoryViewController.swift */; };
+		2F6FA0C12B7387B60037A525 /* NewCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0C02B7387B60037A525 /* NewCategoryView.swift */; };
+		2F6FA0C32B7387CB0037A525 /* NewCategoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0C22B7387CB0037A525 /* NewCategoryCoordinator.swift */; };
+		2F6FA0C52B7388A30037A525 /* NewCategoryAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0C42B7388A30037A525 /* NewCategoryAssembly.swift */; };
 		2FA5B7952B5C149C0050413B /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */; };
 		2FA5B7972B5C25F20050413B /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7962B5C25F10050413B /* CategoryTableViewCell.swift */; };
+		2FA5B7992B5D64B40050413B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7982B5D64B40050413B /* Constants.swift */; };
+		2FA5B79B2B5D8A120050413B /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B79A2B5D8A120050413B /* EmojiCollectionViewCell.swift */; };
+		2FA5B79D2B5D8A1C0050413B /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B79C2B5D8A1C0050413B /* ColorCollectionViewCell.swift */; };
 		2FCFBDE92B4FE3A400837C0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */; };
 		2FCFBDEB2B4FE3A400837C0B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */; };
 		2FCFBDF22B4FE3A500837C0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FCFBDF12B4FE3A500837C0B /* Assets.xcassets */; };
@@ -61,9 +68,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2FA5B7922B5927560050413B /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
+		2F6FA0BB2B70ED780037A525 /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		2F6FA0BD2B7387810037A525 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
+		2F6FA0C02B7387B60037A525 /* NewCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryView.swift; sourceTree = "<group>"; };
+		2F6FA0C22B7387CB0037A525 /* NewCategoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryCoordinator.swift; sourceTree = "<group>"; };
+		2F6FA0C42B7388A30037A525 /* NewCategoryAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryAssembly.swift; sourceTree = "<group>"; };
 		2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
 		2FA5B7962B5C25F10050413B /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		2FA5B7982B5D64B40050413B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2FA5B79A2B5D8A120050413B /* EmojiCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewCell.swift; sourceTree = "<group>"; };
+		2FA5B79C2B5D8A1C0050413B /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
 		2FCFBDE52B4FE3A400837C0B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCFBDE82B4FE3A400837C0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FCFBDEA2B4FE3A400837C0B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +141,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F6FA0BF2B73878A0037A525 /* NewCategory */ = {
+			isa = PBXGroup;
+			children = (
+				2F6FA0BD2B7387810037A525 /* NewCategoryViewController.swift */,
+				2F6FA0C02B7387B60037A525 /* NewCategoryView.swift */,
+				2F6FA0C22B7387CB0037A525 /* NewCategoryCoordinator.swift */,
+				2F6FA0C42B7388A30037A525 /* NewCategoryAssembly.swift */,
+			);
+			name = NewCategory;
+			sourceTree = "<group>";
+		};
 		2FCFBDDC2B4FE3A400837C0B = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +191,7 @@
 		2FCFBE042B50116700837C0B /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2F6FA0BF2B73878A0037A525 /* NewCategory */,
 				2FCFBE662B55721E00837C0B /* Category */,
 				2FCFBE552B53024500837C0B /* Schedule */,
 				2FCFBE4A2B52C67A00837C0B /* NewHabit */,
@@ -246,7 +272,8 @@
 				2FCFBE312B51A08A00837C0B /* Tracker.swift */,
 				2FCFBE332B51A09300837C0B /* TrackerCategory.swift */,
 				2FCFBE352B51A09E00837C0B /* TrackerRecord.swift */,
-				2FA5B7922B5927560050413B /* WeekDay.swift */,
+				2FA5B7982B5D64B40050413B /* Constants.swift */,
+				2F6FA0BB2B70ED780037A525 /* Placeholder.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -267,6 +294,8 @@
 			children = (
 				2FCFBE4B2B52C69C00837C0B /* NewHabitViewController.swift */,
 				2FCFBE4D2B52C6A700837C0B /* NewHabitView.swift */,
+				2FA5B79A2B5D8A120050413B /* EmojiCollectionViewCell.swift */,
+				2FA5B79C2B5D8A1C0050413B /* ColorCollectionViewCell.swift */,
 				2FCFBE532B52D77100837C0B /* NewHabitTableViewCell.swift */,
 				2FCFBE4F2B52C6B300837C0B /* NewHabitAssembly.swift */,
 				2FCFBE512B52C6CA00837C0B /* NewHabitCoordinator.swift */,
@@ -376,6 +405,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F6FA0C32B7387CB0037A525 /* NewCategoryCoordinator.swift in Sources */,
 				2FCFBE292B519FB100837C0B /* StatisticAssembly.swift in Sources */,
 				2FCFBE2D2B519FED00837C0B /* StatisticView.swift in Sources */,
 				2FCFBE452B52AD8A00837C0B /* CreateTrackerAssembly.swift in Sources */,
@@ -390,6 +420,7 @@
 				2FCFBE4C2B52C69C00837C0B /* NewHabitViewController.swift in Sources */,
 				2FCFBE502B52C6B300837C0B /* NewHabitAssembly.swift in Sources */,
 				2FCFBE5B2B5302A100837C0B /* ScheduleAssembly.swift in Sources */,
+				2FA5B79D2B5D8A1C0050413B /* ColorCollectionViewCell.swift in Sources */,
 				2FCFBE182B50165E00837C0B /* UIColor+Extension.swift in Sources */,
 				2FCFBE6C2B55725800837C0B /* CategoryAssembly.swift in Sources */,
 				2FCFBE032B500FCB00837C0B /* Assembly.swift in Sources */,
@@ -398,9 +429,11 @@
 				2FCFBE262B5192FE00837C0B /* TrackersViewController.swift in Sources */,
 				2FCFBE242B5192DC00837C0B /* TrackersView.swift in Sources */,
 				2FCFBE3A2B51A51400837C0B /* TrackerCollectionViewCell.swift in Sources */,
+				2F6FA0BE2B7387810037A525 /* NewCategoryViewController.swift in Sources */,
 				2FCFBE0F2B5012D400837C0B /* BaseViewController.swift in Sources */,
 				2FCFBE1B2B51907400837C0B /* RootTab.swift in Sources */,
 				2FCFBE472B52AD9000837C0B /* CreateTrackerView.swift in Sources */,
+				2FA5B7992B5D64B40050413B /* Constants.swift in Sources */,
 				2FCFBE342B51A09300837C0B /* TrackerCategory.swift in Sources */,
 				2FCFBE2B2B519FD400837C0B /* StatisticCoordinator.swift in Sources */,
 				2FCFBE072B5011D800837C0B /* SplashViewController.swift in Sources */,
@@ -408,6 +441,7 @@
 				2FCFBE362B51A09E00837C0B /* TrackerRecord.swift in Sources */,
 				2FCFBE432B52AD8100837C0B /* CreateTrackerCoordinator.swift in Sources */,
 				2FCFBE2F2B51A01700837C0B /* StatisticViewController.swift in Sources */,
+				2F6FA0C52B7388A30037A525 /* NewCategoryAssembly.swift in Sources */,
 				2FCFBE6E2B55726200837C0B /* CategoryCoordinator.swift in Sources */,
 				2FCFBE5F2B53068200837C0B /* ScheduleTableViewCell.swift in Sources */,
 				2FCFBE202B51929200837C0B /* TrackersAssembly.swift in Sources */,
@@ -423,8 +457,10 @@
 				2FCFBE4E2B52C6A700837C0B /* NewHabitView.swift in Sources */,
 				2FCFBE092B50122B00837C0B /* SplashView.swift in Sources */,
 				2FCFBE542B52D77100837C0B /* NewHabitTableViewCell.swift in Sources */,
-				2FA5B7932B5927560050413B /* WeekDay.swift in Sources */,
+				2FA5B79B2B5D8A120050413B /* EmojiCollectionViewCell.swift in Sources */,
+				2F6FA0BC2B70ED780037A525 /* Placeholder.swift in Sources */,
 				2FCFBE592B53029600837C0B /* ScheduleView.swift in Sources */,
+				2F6FA0C12B7387B60037A525 /* NewCategoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

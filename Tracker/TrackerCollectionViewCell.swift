@@ -7,16 +7,23 @@
 
 import UIKit
 
+protocol TrackerCollectionCellDelegate: AnyObject {
+    func completeTracker(id: UInt)
+    func uncompleteTracker(id: UInt)
+}
+
+protocol TrackerCollectionCellViewDelegate: AnyObject {
+    func reloadCell(indexPath: IndexPath)
+}
+
 final class TrackerCollectionViewCell: UICollectionViewCell {
     var trackerService: TrackersService?
-    private var tracker: Tracker?
+    var delegate: TrackerCollectionCellDelegate?
+    var delegateView: TrackerCollectionCellViewDelegate?
 
-    lazy var isDone: Bool = {
-        guard let _ = trackerService?.completedTrackers.first(where: { $0.id == tracker?.id }) else {
-            return false
-        }
-        return true
-    }()
+    private var tracker: Tracker?
+    private var isDoneToday: Bool = false
+    private var indexPath: IndexPath?
 
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
@@ -57,7 +64,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     private lazy var topView: UIView = {
         let topView = UIView()
-        topView.backgroundColor = .trackerOrange
         topView.layer.cornerRadius = 16
         topView.addSubview(topStackView)
         topView.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +80,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private lazy var doneButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "PlusTracker"), for: .normal)
-        button.tintColor = .trackerOrange
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.layer.cornerRadius = 17
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -130,39 +135,62 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setTracker(newTracker: Tracker) {
+    func configure(newTracker: Tracker, isDoneToday: Bool, completedDays: Int, indexPath: IndexPath) {
         tracker = newTracker
+        self.isDoneToday = isDoneToday
+        self.indexPath = indexPath
+
+        topView.backgroundColor = newTracker.color
         emojiLabel.text = newTracker.emoji
+        doneButton.isEnabled = true
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.15
         trackerLabel.attributedText = NSMutableAttributedString(
             string: newTracker.name,
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
-        dayLabel.text = ""//newTracker.schedule
+        dayLabel.text = createStringWithCountDay(count: completedDays)
+
+        if isDoneToday {
+            let image = UIImage(named: "DoneTracker")?.withTintColor(.trackerWhite)
+            doneButton.setImage(image, for: .normal)
+            doneButton.tintColor = .trackerWhite
+            doneButton.layer.backgroundColor = newTracker.color.withAlphaComponent(0.3).cgColor
+        } else {
+            doneButton.setImage(UIImage(named: "PlusTracker"), for: .normal)
+            doneButton.layer.backgroundColor = UIColor.clear.cgColor
+            doneButton.tintColor = newTracker.color
+        }
+    }
+
+    func enabledDoneButton(isEnable: Bool) {
+        guard let tracker, !isDoneToday else {
+            return
+        }
+
+        doneButton.tintColor = isEnable ? tracker.color : tracker.color.withAlphaComponent(0.3)
+        doneButton.isEnabled = isEnable ? true : false
     }
 
     // MARK: - Private methods
 
+    private func createStringWithCountDay(count: Int) -> String {
+        switch count {
+        case 1:
+            return "\(count) день"
+        case 2,3,4:
+            return "\(count) дня"
+        default:
+            return "\(count) дней"
+        }
+    }
+
     @objc private func didTapDoneButton(sender: UIButton!) {
-        guard let tracker else {
+        guard let tracker, let indexPath else {
             return
         }
-        if !isDone {
-            let image = UIImage(named: "DoneTracker")?.withTintColor(.trackerWhite)
-            sender.setImage(image, for: .normal)
-            sender.tintColor = .trackerWhite
-            sender.layer.backgroundColor = UIColor.trackerOrange.withAlphaComponent(0.3).cgColor
 
-            trackerService?.appendCompletedTracker(newTracker: TrackerRecord(id: 0, date: Date()))
-            isDone = !isDone
-        } else {
-            sender.setImage(UIImage(named: "PlusTracker"), for: .normal)
-            sender.tintColor = .trackerOrange
-            sender.layer.backgroundColor = UIColor.clear.cgColor
-
-            trackerService?.removeCompletedTracker(cell: tracker.id)
-            isDone = !isDone
-        }
+        isDoneToday ? delegate?.uncompleteTracker(id: tracker.id) : delegate?.completeTracker(id: tracker.id)
+        delegateView?.reloadCell(indexPath: indexPath)
     }
 }

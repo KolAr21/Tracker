@@ -8,15 +8,27 @@
 import UIKit
 
 final class TrackersViewController<View: TrackersView>: BaseViewController<View> {
-    var categories: [TrackerCategory] = [] //Оно здесь только ради чеклиста
+    var completedTrackers: [TrackerRecord] = []
+    var categories: [TrackerCategory]
     var openCreateTracker: (() -> Void)?
 
-    private var categoriesObserver: NSObjectProtocol?
+    private var trackersObserver: NSObjectProtocol?
+    private var currentDate: Date = Date()
+
+    private lazy var datePicker = UIDatePicker()
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EE"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        return dateFormatter
+
+    }()
 
     let trackerService: TrackersService
 
     init(trackerService: TrackersService) {
         self.trackerService = trackerService
+        self.categories = trackerService.categories
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,20 +40,21 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        rootView.categoriesForView = trackerService.categories
+        datePickerValueChanged()
         setupBar()
 
+        rootView.delegate = self
         rootView.trackerService = trackerService
         rootView.setView()
 
-        categoriesObserver = NotificationCenter.default.addObserver(
-            forName: TrackersServiceImp.DidChangeCategoriesNotification,
+        trackersObserver = NotificationCenter.default.addObserver(
+            forName: TrackersServiceImp.DidChangeTrackersNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            rootView.categoriesForView = trackerService.categories
-            self.rootView.reloadData()
+            categories = trackerService.categories
+            datePickerValueChanged()
         }
     }
 
@@ -52,10 +65,9 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         let addButtonImage = UIImage(named: "AddTracker")?.withAlignmentRectInsets(rectInsets)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: addButtonImage, style: .plain, target: self, action: #selector(createNewTracker))
 
-        let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.widthAnchor.constraint(equalToConstant: 120).isActive = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
@@ -66,28 +78,71 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 34, weight: .bold)
         ]
-
-        navigationItem.searchController = rootView.search
-        navigationItem.searchController?.searchBar.placeholder = "Поиск"
-
     }
 
-    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EE"
-        let formattedDate = dateFormatter.string(from: selectedDate)
-        var sortedCategories: [TrackerCategory] = []
-        for category in rootView.categoriesForView {
-            let sortedTrackerList = category.trackersList.filter { $0.schedule.contains(formattedDate) }
-            sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))
-        }
-        rootView.categoriesForView = sortedCategories
-
-        rootView.reloadData()
+    @objc private func datePickerValueChanged() {
+        currentDate = datePicker.date
+        reloadVisibleCategories(text: nil)
     }
 
     @objc private func createNewTracker() {
         openCreateTracker?()
+    }
+
+    private func isSameTracker(trackerRecord: TrackerRecord, id: UInt) -> Bool {
+        let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+        return trackerRecord.id == id && isSameDay
+    }
+}
+
+// MARK: - TrackersViewDelegate
+
+extension TrackersViewController: TrackersViewDelegate {
+    func reloadVisibleCategories(text: String?) {
+        let selectedDate = currentDate
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        var sortedCategories: [TrackerCategory] = []
+        for category in categories {
+            let sortedTrackerList = category.trackersList.filter {
+                text != nil ? $0.name.lowercased().contains(text ?? "") && $0.schedule.contains(formattedDate) : $0.schedule.contains(formattedDate)
+            }
+            if !sortedTrackerList.isEmpty {
+                sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))
+            }
+        }
+
+        rootView.reloadData(
+            newCategories: sortedCategories,
+            placeholder: text != nil ? .notFoundCategories : .emptyCategories
+        )
+    }
+
+    func isTrackerCompleteToday(trackerId: UInt) -> Bool {
+        completedTrackers.contains { trackerRecord in
+            isSameTracker(trackerRecord: trackerRecord, id: trackerId)
+        }
+    }
+
+    func enableDoneButton(completion: (Bool) -> ()) {
+        completion(!(currentDate > Date()))
+    }
+}
+
+// MARK: - TrackerCollectionCellDelegate
+
+extension TrackersViewController: TrackerCollectionCellDelegate {
+    func countCompletedTracker(trackerId: UInt) -> Int {
+        completedTrackers.filter { $0.id == trackerId}.count
+    }
+
+    func completeTracker(id: UInt) {
+        let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
+        completedTrackers.append(trackerRecord)
+    }
+
+    func uncompleteTracker(id: UInt) {
+        completedTrackers.removeAll { trackerRecord in
+            isSameTracker(trackerRecord: trackerRecord, id: id)
+        }
     }
 }

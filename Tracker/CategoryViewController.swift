@@ -8,7 +8,10 @@
 import UIKit
 
 final class CategoryViewController<View: CategoryView>: BaseViewController<View> {
+    var addNewCategoryClosure: (() -> ())?
     let trackerService: TrackersService
+
+    private var categoriesObserver: NSObjectProtocol?
 
     init(trackerService: TrackersService) {
         self.trackerService = trackerService
@@ -27,6 +30,15 @@ final class CategoryViewController<View: CategoryView>: BaseViewController<View>
         rootView.setView()
 
         setupBar()
+
+        categoriesObserver = NotificationCenter.default.addObserver(
+            forName: TrackersServiceImp.DidChangeCategoriesNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.rootView.reload()
+        }
     }
 
     // MARK: - Private methods
@@ -40,7 +52,13 @@ final class CategoryViewController<View: CategoryView>: BaseViewController<View>
     }
 }
 
+// MARK: - CategoryViewDelegate
+
 extension CategoryViewController: CategoryViewDelegate {
+    func addNewCategory() {
+        addNewCategoryClosure?()
+    }
+
     func dismissVC() {
         dismiss(animated: true)
     }

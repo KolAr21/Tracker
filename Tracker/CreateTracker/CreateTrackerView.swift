@@ -15,6 +15,7 @@ protocol CreateTrackerView: UIView {
 
 protocol CreateTrackerViewDelegate: AnyObject {
     func openNewHabit()
+    func openIrregularEvent()
 }
 
 final class CreateTrackerViewImp: UIView, CreateTrackerView {
@@ -32,6 +33,7 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
         let button = UIButton()
         button.setTitle("Нерегулярные событие", for: .normal)
         setSettingsButton(button: button)
+        button.addTarget(self, action: #selector(openIrregularEvent), for: .touchUpInside)
         return button
     }()
 
@@ -75,5 +77,9 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
 
     @objc private func openNewHabit(sender: UIButton!) {
         delegate?.openNewHabit()
+    }
+
+    @objc private func openIrregularEvent(sender: UIButton!) {
+        delegate?.openIrregularEvent()
     }
 }

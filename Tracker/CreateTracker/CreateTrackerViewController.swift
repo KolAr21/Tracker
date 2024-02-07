@@ -8,7 +8,8 @@
 import UIKit
 
 final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewController<View> {
-    var openNewHabbit: (() -> Void)?
+    var openNewHabitClosure: (() -> Void)?
+    var openIrregularEventClosure: (() -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,10 @@ final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewContro
 
 extension CreateTrackerViewController: CreateTrackerViewDelegate {
     func openNewHabit() {
-        openNewHabbit?()
+        openNewHabitClosure?()
+    }
+
+    func openIrregularEvent() {
+        openIrregularEventClosure?()
     }
 }

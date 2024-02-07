@@ -11,11 +11,13 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
     var onOpenSchedule: (() -> Void)?
     var onOpenCategory: (() -> Void)?
     var trackerService: TrackersService
+    var parameters: [String]
 
     private var itemsObserver: NSObjectProtocol?
 
-    init(trackerService: TrackersService) {
+    init(trackerService: TrackersService, parameters: [String]) {
         self.trackerService = trackerService
+        self.parameters = parameters
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -26,9 +28,10 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        rootView.setView()
-        rootView.delegate = self
         rootView.trackerService = trackerService
+        rootView.parameters = parameters
+        rootView.delegate = self
+        rootView.setView()
 
         setupBar()
 
@@ -42,6 +45,7 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
             }
             self.rootView.selectCategory = trackerService.selectCategory
             self.rootView.selectSchedule = trackerService.selectWeekdays.count == 7 ? "Каждый день" : trackerService.selectWeekdays.joined(separator: ", ")
+            self.rootView.isEnableButton()
             self.rootView.reloadData()
         }
     }
@@ -50,7 +54,7 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
 
     private func setupBar() {
         navigationItem.hidesBackButton = true
-        title = "Новая привычка"
+        title = parameters.count == 2 ? "Новая привычка" : "Новое нерегулярное событие"
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)

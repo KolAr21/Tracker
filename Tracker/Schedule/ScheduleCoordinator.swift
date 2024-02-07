@@ -14,4 +14,3 @@ final class ScheduleCoordinator: BaseCoordinator<ScheduleCoordinator.Context> {
         assembly.scheduleVC()
     }
 }
-

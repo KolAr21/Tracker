@@ -76,11 +76,7 @@ final class ScheduleViewImp: UIView, ScheduleView {
                 return
             }
             weekdaySwitch[weekdays[row]] = cell.switcher.isOn
-//            if cell.switcher.isOn {
-//                weekdaySwitch.append(weekdays[row])
-//            }
         }
-        print(weekdaySwitch)
         trackerService?.updateWeekdays(newSelectWeekdays: weekdaySwitch)
         delegate?.dismissVC()
     }
@@ -102,6 +98,10 @@ extension ScheduleViewImp: UITableViewDataSource {
         }
 
         cell.label.text = weekdays[indexPath.row].prefix(1).uppercased() + weekdays[indexPath.row].dropFirst()
+        let shortWeekday = Calendar.sortedShortWeekdays()
+        if let selectWeekday = trackerService?.selectWeekdays, selectWeekday.contains(shortWeekday[indexPath.row]) {
+            cell.switcher.isOn = true
+        }
 
         switch indexPath.row {
         case 0:
@@ -113,6 +113,7 @@ extension ScheduleViewImp: UITableViewDataSource {
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         default: break
         }
+
         return cell
     }
 }

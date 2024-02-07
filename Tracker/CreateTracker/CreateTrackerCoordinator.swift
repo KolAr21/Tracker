@@ -12,8 +12,15 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
 
     override func make() -> UIViewController? {
         let controller = assembly.createTrackerVC()
-        controller.openNewHabbit = { [weak controller] in
-            let coordinator = self.assembly.newHabitCoordinator()
+        controller.openNewHabitClosure = { [weak controller] in
+            let coordinator = self.assembly.newHabitCoordinator(parameters: ["Категория", "Расписание"])
+            guard let newHabitVC = coordinator.make() else {
+                return
+            }
+            controller?.navigationController?.pushViewController(newHabitVC, animated: true)
+        }
+        controller.openIrregularEventClosure = { [weak controller] in
+            let coordinator = self.assembly.newHabitCoordinator(parameters: ["Категория"])
             guard let newHabitVC = coordinator.make() else {
                 return
             }

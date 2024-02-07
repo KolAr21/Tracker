@@ -12,9 +12,11 @@ protocol CategoryView: UIView {
     var delegate: CategoryViewDelegate? { get set }
 
     func setView()
+    func reload()
 }
 
 protocol CategoryViewDelegate: AnyObject {
+    func addNewCategory()
     func dismissVC()
 }
 
@@ -107,8 +109,21 @@ final class CategoryViewImp: UIView, CategoryView {
         }
     }
 
-    @objc private func addNewCategory() {
+    func reload() {
+        tableView.reloadData()
+        didHiddenPlaceholder()
+    }
 
+    @objc private func addNewCategory() {
+        delegate?.addNewCategory()
+    }
+
+    private func didHiddenPlaceholder() {
+        guard let trackerService else {
+            return
+        }
+
+        placeholderStackView.isHidden = !trackerService.categoriesList.isEmpty
     }
 }
 
@@ -129,15 +144,20 @@ extension CategoryViewImp: UITableViewDataSource {
             return cell
         }
 
-        switch indexPath.row {
-        case 0:
+        if trackerService.categoriesList.count == 1 {
+            cell.layer.cornerRadius = 16
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
+        } else if indexPath.row == 0 {
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        case trackerService.categoriesList.count - 1:
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        } else if indexPath.row == trackerService.categoriesList.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        default: break
+        } else {
+            cell.layer.cornerRadius = 0
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
 
         cell.label.text = trackerService.categoriesList[indexPath.row]

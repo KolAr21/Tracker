@@ -8,64 +8,49 @@
 import Foundation
 
 protocol TrackersService {
-    var categories: [TrackerCategory] { get set }
-    var completedTrackers: [TrackerRecord] { get set }
-    var categoriesList: [String] { get set }
-    var selectWeekdays: [String] { get set }
-    var selectCategory: String? { get set }
+    var categories: [TrackerCategory] { get }
+    var categoriesList: [String] { get }
+    var selectWeekdays: [String] { get }
+    var selectCategory: String? { get }
 
-    func appendCompletedTracker(newTracker: TrackerRecord)
-    func removeCompletedTracker(cell indexPath: UInt)
     func updateCategoriesList(categoryTracker: TrackerCategory)
     func updateWeekdays(newSelectWeekdays: [String: Bool])
     func updateSelectCategory(newSelectCategory: String)
     func addCategory(newCategory: String)
+    func removeSelectItems()
 }
 
 final class TrackersServiceImp: TrackersService {
-    static let DidChangeCategoriesNotification = Notification.Name(rawValue: "CategoriesDidChange")
+    static let DidChangeTrackersNotification = Notification.Name(rawValue: "TrackersDidChange")
     static let DidChangeSelectItemsNotification = Notification.Name(rawValue: "SelectItemDidChange")
+    static let DidChangeCategoriesNotification = Notification.Name(rawValue: "CategoriesDidChange")
 
-    var categories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
-    var categoriesList: [String] = ["Baжное", "Неважное", "Тест"]
-    var selectWeekdays: [String] = []
-    var selectCategory: String? = "Baжное"
-
-    func appendCompletedTracker(newTracker: TrackerRecord) {
-        completedTrackers.append(newTracker)
-    }
-
-    func removeCompletedTracker(cell indexPath: UInt) {
-        guard let id = completedTrackers.firstIndex(where: { $0.id == indexPath }) else {
-            return
-        }
-        completedTrackers.remove(at: id)
-    }
+    private(set) var categories: [TrackerCategory] = []
+    private(set) var categoriesList: [String] = ["Baжное"]
+    private(set) var selectWeekdays: [String] = []
+    private(set) var selectCategory: String?
 
     func updateCategoriesList(categoryTracker: TrackerCategory) {
-        var newCategories: [TrackerCategory] = []
         guard let index = categories.firstIndex(where: { $0.title == categoryTracker.title }) else {
-            newCategories = categories
-            newCategories.append(categoryTracker)
-            categories = newCategories
-            NotificationCenter.default.post(name: TrackersServiceImp.DidChangeCategoriesNotification, object: self)
+            categories.append(categoryTracker)
+            NotificationCenter.default.post(name: TrackersServiceImp.DidChangeTrackersNotification, object: self)
             return
         }
+        var newCategories: [TrackerCategory] = []
         let category = categories.remove(at: index)
         var trackerListCategory: [Tracker] = []
         trackerListCategory = category.trackersList
         let newTracker = categoryTracker.trackersList[0]
         trackerListCategory.append(newTracker)
         newCategories = categories
-        newCategories.append(TrackerCategory(title: categoryTracker.title, trackersList: trackerListCategory))
+        newCategories.insert(TrackerCategory(title: categoryTracker.title, trackersList: trackerListCategory), at: index)
         categories = newCategories
-        NotificationCenter.default.post(name: TrackersServiceImp.DidChangeCategoriesNotification, object: self)
+        NotificationCenter.default.post(name: TrackersServiceImp.DidChangeTrackersNotification, object: self)
     }
 
     func updateWeekdays(newSelectWeekdays: [String: Bool]) {
         let shortWeekdays = Calendar.sortedShortWeekdays()
-        var weekdays = Calendar.sortedWeekdays()
+        let weekdays = Calendar.sortedWeekdays()
         var newWeekdays: [String] = []
 
         weekdays.enumerated().forEach { idx, day in
@@ -79,9 +64,16 @@ final class TrackersServiceImp: TrackersService {
 
     func updateSelectCategory(newSelectCategory: String) {
         selectCategory = newSelectCategory
+        NotificationCenter.default.post(name: TrackersServiceImp.DidChangeSelectItemsNotification, object: self)
     }
 
     func addCategory(newCategory: String) {
         categoriesList.append(newCategory)
+        NotificationCenter.default.post(name: TrackersServiceImp.DidChangeCategoriesNotification, object: self)
+    }
+
+    func removeSelectItems() {
+        selectCategory = nil
+        selectWeekdays = []
     }
 }
