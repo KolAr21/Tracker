@@ -254,13 +254,13 @@ final class NewHabitViewImp: UIView, NewHabitView {
               let colorIndex = collectionView.indexPathsForSelectedItems?.filter({ $0.section == 1 }).first?.row else {
             return
         }
-        var newTracker = Tracker(id: UInt.random(in: 0...1000000), name: text, color: Constants.color[colorIndex], emoji: Constants.emoji[emojiIndex], schedule: Calendar.sortedShortWeekdays())
+        var newTracker = Tracker(id: UUID(), name: text, color: Constants.color[colorIndex], emoji: Constants.emoji[emojiIndex], schedule: Calendar.sortedShortWeekdays())
 
         if parameters.count == 2 {
             guard let schedule = trackerService?.selectWeekdays else {
                 return
             }
-            newTracker = Tracker(id: UInt.random(in: 0...1000000), name: text, color: Constants.color[colorIndex], emoji: Constants.emoji[emojiIndex], schedule: schedule)
+            newTracker = Tracker(id: UUID(), name: text, color: Constants.color[colorIndex], emoji: Constants.emoji[emojiIndex], schedule: schedule)
         }
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         trackerService?.updateCategoriesList(categoryTracker: trackerCategory)

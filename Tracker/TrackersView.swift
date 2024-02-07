@@ -19,8 +19,8 @@ protocol TrackersView: UIView {
 protocol TrackersViewDelegate: AnyObject {
     func enableDoneButton(completion: (Bool) -> ())
     func reloadVisibleCategories(text: String?)
-    func isTrackerCompleteToday(trackerId: UInt) -> Bool
-    func countCompletedTracker(trackerId: UInt) -> Int
+    func isTrackerCompleteToday(trackerId: UUID) -> Bool
+    func countCompletedTracker(trackerId: UUID) -> Int
 }
 
 final class TrackersViewImp: UIView, TrackersView {

@@ -89,7 +89,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         openCreateTracker?()
     }
 
-    private func isSameTracker(trackerRecord: TrackerRecord, id: UInt) -> Bool {
+    private func isSameTracker(trackerRecord: TrackerRecord, id: UUID) -> Bool {
         let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
         return trackerRecord.id == id && isSameDay
     }
@@ -117,7 +117,7 @@ extension TrackersViewController: TrackersViewDelegate {
         )
     }
 
-    func isTrackerCompleteToday(trackerId: UInt) -> Bool {
+    func isTrackerCompleteToday(trackerId: UUID) -> Bool {
         completedTrackers.contains { trackerRecord in
             isSameTracker(trackerRecord: trackerRecord, id: trackerId)
         }
@@ -131,16 +131,16 @@ extension TrackersViewController: TrackersViewDelegate {
 // MARK: - TrackerCollectionCellDelegate
 
 extension TrackersViewController: TrackerCollectionCellDelegate {
-    func countCompletedTracker(trackerId: UInt) -> Int {
+    func countCompletedTracker(trackerId: UUID) -> Int {
         completedTrackers.filter { $0.id == trackerId}.count
     }
 
-    func completeTracker(id: UInt) {
+    func completeTracker(id: UUID) {
         let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
         completedTrackers.append(trackerRecord)
     }
 
-    func uncompleteTracker(id: UInt) {
+    func uncompleteTracker(id: UUID) {
         completedTrackers.removeAll { trackerRecord in
             isSameTracker(trackerRecord: trackerRecord, id: id)
         }

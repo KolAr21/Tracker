@@ -8,8 +8,8 @@
 import UIKit
 
 protocol TrackerCollectionCellDelegate: AnyObject {
-    func completeTracker(id: UInt)
-    func uncompleteTracker(id: UInt)
+    func completeTracker(id: UUID)
+    func uncompleteTracker(id: UUID)
 }
 
 protocol TrackerCollectionCellViewDelegate: AnyObject {
