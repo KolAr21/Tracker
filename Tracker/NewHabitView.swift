@@ -189,7 +189,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
             collectionView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
             collectionView.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 460)
+            collectionView.bottomAnchor.constraint(equalTo: buttonsStackView.topAnchor, constant: -16)
         ])
 
         nameHabitTextField.delegate = self
@@ -436,5 +436,10 @@ extension NewHabitViewImp: UICollectionViewDelegateFlowLayout {
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
         CGSize(width: collectionView.frame.width - 44, height: 18)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 82
+        return CGSize(width: width/6, height: width/6)
     }
 }
