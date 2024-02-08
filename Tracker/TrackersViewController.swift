@@ -19,7 +19,6 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EE"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
         return dateFormatter
 
     }()
