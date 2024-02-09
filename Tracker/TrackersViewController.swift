@@ -13,15 +13,8 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     var openCreateTracker: (() -> Void)?
 
     private var trackersObserver: NSObjectProtocol?
-    private var currentDate: Date = Date()
 
     private lazy var datePicker = UIDatePicker()
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EE"
-        return dateFormatter
-
-    }()
 
     let trackerService: TrackersService
 
@@ -80,7 +73,6 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     }
 
     @objc private func datePickerValueChanged() {
-        currentDate = datePicker.date
         reloadVisibleCategories(text: nil)
     }
 
@@ -125,7 +117,7 @@ extension TrackersViewController: TrackersViewDelegate {
     }
 
     func enableDoneButton(completion: (Bool) -> ()) {
-        completion(!(currentDate > Date()))
+        completion(!(datePicker.date > Date()))
     }
 }
 
