@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Weekday: Int, CaseIterable {
+enum Weekday: Int, CaseIterable, Codable {
     case Sunday
     case Monday
     case Tuesday
