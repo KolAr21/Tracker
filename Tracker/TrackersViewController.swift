@@ -98,12 +98,14 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 
 extension TrackersViewController: TrackersViewDelegate {
     func reloadVisibleCategories(text: String?) {
-        let selectedDate = currentDate
-        let formattedDate = dateFormatter.string(from: selectedDate)
+        let index = Calendar.current.component(.weekday, from: datePicker.date)
         var sortedCategories: [TrackerCategory] = []
+
         for category in categories {
             let sortedTrackerList = category.trackersList.filter {
-                text != nil ? $0.name.lowercased().contains(text ?? "") && $0.schedule.contains(formattedDate) : $0.schedule.contains(formattedDate)
+                text != nil ?
+                $0.name.lowercased().contains(text ?? "") && $0.schedule.contains(Weekday.allCases[index - 1]) :
+                $0.schedule.contains(Weekday.allCases[index - 1])
             }
             if !sortedTrackerList.isEmpty {
                 sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))

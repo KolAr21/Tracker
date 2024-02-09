@@ -44,7 +44,8 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
                 return
             }
             self.rootView.selectCategory = trackerService.selectCategory
-            self.rootView.selectSchedule = trackerService.selectWeekdays.count == 7 ? "Каждый день" : trackerService.selectWeekdays.joined(separator: ", ")
+            self.rootView.selectSchedule = trackerService.selectWeekdays.count == 7 ? "Каждый день" : trackerService.selectWeekdays.map({$0.shortName}).joined(separator: ", ")
+            print(trackerService.selectWeekdays.map({$0.shortName}).joined(separator: ", "))
             self.rootView.isEnableButton()
             self.rootView.reloadData()
         }

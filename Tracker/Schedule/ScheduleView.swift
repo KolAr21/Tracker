@@ -23,7 +23,7 @@ final class ScheduleViewImp: UIView, ScheduleView {
     var delegate: ScheduleViewDelegate?
 
     private var weekdays = Calendar.sortedWeekdays()
-    private var weekdaySwitch: [String: Bool] = [:]
+    private var weekdaySwitch: [Weekday] = []
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -75,7 +75,9 @@ final class ScheduleViewImp: UIView, ScheduleView {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ScheduleTableViewCell else {
                 return
             }
-            weekdaySwitch[weekdays[row]] = cell.switcher.isOn
+            if cell.switcher.isOn {
+                weekdaySwitch.append(row == 6 ? Weekday.Sunday : Weekday.allCases[row + 1])
+            }
         }
         trackerService?.updateWeekdays(newSelectWeekdays: weekdaySwitch)
         delegate?.dismissVC()
@@ -97,11 +99,7 @@ extension ScheduleViewImp: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.label.text = weekdays[indexPath.row].prefix(1).uppercased() + weekdays[indexPath.row].dropFirst()
-        let shortWeekday = Calendar.sortedShortWeekdays()
-        if let selectWeekday = trackerService?.selectWeekdays, selectWeekday.contains(shortWeekday[indexPath.row]) {
-            cell.switcher.isOn = true
-        }
+        cell.label.text = indexPath.row == 6 ? Weekday.Sunday.longName : Weekday.allCases[indexPath.row + 1].longName
 
         switch indexPath.row {
         case 0:

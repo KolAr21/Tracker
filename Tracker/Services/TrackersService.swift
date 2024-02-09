@@ -10,11 +10,11 @@ import Foundation
 protocol TrackersService {
     var categories: [TrackerCategory] { get }
     var categoriesList: [String] { get }
-    var selectWeekdays: [String] { get }
+    var selectWeekdays: [Weekday] { get }
     var selectCategory: String? { get }
 
     func updateCategoriesList(categoryTracker: TrackerCategory)
-    func updateWeekdays(newSelectWeekdays: [String: Bool])
+    func updateWeekdays(newSelectWeekdays: [Weekday])
     func updateSelectCategory(newSelectCategory: String)
     func addCategory(newCategory: String)
     func removeSelectItems()
@@ -27,7 +27,7 @@ final class TrackersServiceImp: TrackersService {
 
     private(set) var categories: [TrackerCategory] = []
     private(set) var categoriesList: [String] = ["Baжное"]
-    private(set) var selectWeekdays: [String] = []
+    private(set) var selectWeekdays: [Weekday] = []
     private(set) var selectCategory: String?
 
     func updateCategoriesList(categoryTracker: TrackerCategory) {
@@ -48,17 +48,8 @@ final class TrackersServiceImp: TrackersService {
         NotificationCenter.default.post(name: TrackersServiceImp.DidChangeTrackersNotification, object: self)
     }
 
-    func updateWeekdays(newSelectWeekdays: [String: Bool]) {
-        let shortWeekdays = Calendar.sortedShortWeekdays()
-        let weekdays = Calendar.sortedWeekdays()
-        var newWeekdays: [String] = []
-
-        weekdays.enumerated().forEach { idx, day in
-            if newSelectWeekdays[day] == true {
-                newWeekdays.append(shortWeekdays[idx])
-            }
-        }
-        selectWeekdays = newWeekdays
+    func updateWeekdays(newSelectWeekdays: [Weekday]) {
+        selectWeekdays = newSelectWeekdays
         NotificationCenter.default.post(name: TrackersServiceImp.DidChangeSelectItemsNotification, object: self)
     }
 
