@@ -1,5 +1,5 @@
 //
-//  DataManager.swift
+//  TrackerStore.swift
 //  Tracker
 //
 //  Created by Арина Колганова on 10.02.2024.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-final class DataManager {
+final class TrackerStore {
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Tracker")
         container.loadPersistentStores { (storeDescription, error) in
