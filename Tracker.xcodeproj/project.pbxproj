@@ -15,6 +15,7 @@
 		2F6FA0C82B7684100037A525 /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0C62B76840F0037A525 /* Tracker.xcdatamodeld */; };
 		2F6FA0CA2B768F110037A525 /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0C92B768F110037A525 /* Weekday.swift */; };
 		2F6FA0CC2B769FD30037A525 /* DaysValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0CB2B769FD30037A525 /* DaysValueTransformer.swift */; };
+		2F6FA0D12B776B170037A525 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6FA0D02B776B170037A525 /* DataManager.swift */; };
 		2FA5B7952B5C149C0050413B /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */; };
 		2FA5B7972B5C25F20050413B /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7962B5C25F10050413B /* CategoryTableViewCell.swift */; };
 		2FA5B7992B5D64B40050413B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5B7982B5D64B40050413B /* Constants.swift */; };
@@ -79,6 +80,7 @@
 		2F6FA0C72B76840F0037A525 /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		2F6FA0C92B768F110037A525 /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
 		2F6FA0CB2B769FD30037A525 /* DaysValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysValueTransformer.swift; sourceTree = "<group>"; };
+		2F6FA0D02B776B170037A525 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		2FA5B7942B5C149C0050413B /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
 		2FA5B7962B5C25F10050413B /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		2FA5B7982B5D64B40050413B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 			isa = PBXGroup;
 			children = (
 				2FCFBE622B53A61C00837C0B /* TrackersService.swift */,
+				2F6FA0D02B776B170037A525 /* DataManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F6FA0C32B7387CB0037A525 /* NewCategoryCoordinator.swift in Sources */,
+				2F6FA0D12B776B170037A525 /* DataManager.swift in Sources */,
 				2FCFBE292B519FB100837C0B /* StatisticAssembly.swift in Sources */,
 				2FCFBE2D2B519FED00837C0B /* StatisticView.swift in Sources */,
 				2FCFBE452B52AD8A00837C0B /* CreateTrackerAssembly.swift in Sources */,
