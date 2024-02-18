@@ -15,7 +15,10 @@ final class AppCoordinator: BaseCoordinator<CoordinatorContext> {
     func start(window: UIWindow?) {
         self.window = window
         let coordinator = assembly.splashCoordinator { [weak self] in
-            self?.setTabVC()
+            let onboardingCoordinator = self?.assembly.onboardingCoordinator { [weak self] in
+                self?.setTabVC()
+            }
+            self?.setRoot(viewController: onboardingCoordinator?.make())
         }
         setRoot(viewController: coordinator.make())
     }
