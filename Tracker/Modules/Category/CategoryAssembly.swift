@@ -9,7 +9,8 @@ import UIKit
 
 protocol CategoryAssembly {
     func categoryCoordinator() -> CategoryCoordinator
-    func categoryVC() -> CategoryViewController<CategoryViewImp>
+    func categoryVC() -> CategoryViewController
+    func categoryVM() -> CategoriesViewModel
 }
 
 extension Assembly: CategoryAssembly {
@@ -17,7 +18,13 @@ extension Assembly: CategoryAssembly {
         CategoryCoordinator(assembly: self, context: .init())
     }
 
-    func categoryVC() -> CategoryViewController<CategoryViewImp> {
+    func categoryVC() -> CategoryViewController {
+        let viewController = CategoryViewController()
+        viewController.initialize(viewModel: categoryVM())
+        return viewController
+    }
+
+    func categoryVM() -> CategoriesViewModel {
         .init(dataProvider: dataProvider)
     }
 }
