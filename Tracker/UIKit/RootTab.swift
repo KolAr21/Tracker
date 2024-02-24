@@ -8,7 +8,7 @@
 import UIKit
 
 enum RootTab: Int {
-    case tracker = 0
+    case tracker
     case statistic
 
     var tabBarItem: UITabBarItem {

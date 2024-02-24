@@ -8,14 +8,25 @@
 import UIKit
 
 final class CategoryTableViewCell: UITableViewCell {
-    lazy var label: UILabel = {
+    var viewModel: CategoryViewModel? {
+        didSet {
+            viewModel?.categoryLabelBinding = { [weak self] category in
+                self?.label.text = category
+            }
+            viewModel?.categorySelectBinding = { [weak self] isSelect in
+                self?.arrowImage.isHidden = !isSelect
+            }
+        }
+    }
+
+    private lazy var label: UILabel = {
         let label = UILabel()
         label.textColor = .trackerBlack
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()
 
-    lazy var arrowImage: UIImageView = {
+    private lazy var arrowImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "DoneTracker")
         image.tintColor = .trackerBlue
@@ -50,10 +61,5 @@ final class CategoryTableViewCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(category: String, isSelect: Bool) {
-        label.text = category
-        arrowImage.isHidden = isSelect
     }
 }
