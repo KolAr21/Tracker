@@ -174,14 +174,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     // MARK: - Private methods
 
     private func createStringWithCountDay(count: Int) -> String {
-        switch count {
-        case 1:
-            return "\(count) день"
-        case 2,3,4:
-            return "\(count) дня"
-        default:
-            return "\(count) дней"
-        }
+        String.localizedStringWithFormat(
+            NSLocalizedString("countOfDays", comment: "Count of completed days"),
+            count
+        )
     }
 
     @objc private func didTapDoneButton(sender: UIButton!) {
