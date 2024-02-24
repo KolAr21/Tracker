@@ -19,9 +19,7 @@ extension Assembly: CategoryAssembly {
     }
 
     func categoryVC() -> CategoryViewController {
-        let viewController = CategoryViewController()
-        viewController.initialize(viewModel: categoryVM())
-        return viewController
+        CategoryViewController(viewModel: categoryVM())
     }
 
     func categoryVM() -> CategoriesViewModel {

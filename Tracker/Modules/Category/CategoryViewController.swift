@@ -10,7 +10,7 @@ import UIKit
 final class CategoryViewController: UIViewController {
     var addNewCategoryClosure: (() -> ())?
 
-    private var viewModel: CategoriesViewModel!
+    private var viewModel: CategoriesViewModel
 
     private lazy var placeholderImageView: UIImageView = {
         UIImageView(image: UIImage(named: "PlaceholderTracker"))
@@ -57,10 +57,15 @@ final class CategoryViewController: UIViewController {
         return button
     }()
 
-
-    func initialize(viewModel: CategoriesViewModel) {
+    init(viewModel: CategoriesViewModel) {
         self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+
         bind()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -104,10 +109,6 @@ final class CategoryViewController: UIViewController {
     }
 
     private func bind() {
-        guard let viewModel = viewModel else {
-            return
-        }
-
         viewModel.categoriesBinding = { [weak self] _ in
             self?.reload()
         }
@@ -139,16 +140,14 @@ final class CategoryViewController: UIViewController {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.categories.count ?? 0
+        viewModel.categories.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "CategoryCell",
             for: indexPath
-        ) as? CategoryTableViewCell,
-              let viewModel
-        else {
+        ) as? CategoryTableViewCell else {
             return UITableViewCell()
         }
 
@@ -183,7 +182,7 @@ extension CategoryViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        viewModel?.updateSelectCategory(newSelectCategory: viewModel?.categories[indexPath.row].category ?? "")
+        viewModel.updateSelectCategory(newSelectCategory: viewModel.categories[indexPath.row].category)
         dismiss(animated: true)
     }
 }

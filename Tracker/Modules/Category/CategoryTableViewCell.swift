@@ -8,12 +8,12 @@
 import UIKit
 
 final class CategoryTableViewCell: UITableViewCell {
-    var viewModel: CategoryViewModel! {
+    var viewModel: CategoryViewModel? {
         didSet {
-            viewModel.categoryLabelBinding = { [weak self] category in
+            viewModel?.categoryLabelBinding = { [weak self] category in
                 self?.label.text = category
             }
-            viewModel.categorySelectBinding = { [weak self] isSelect in
+            viewModel?.categorySelectBinding = { [weak self] isSelect in
                 self?.arrowImage.isHidden = !isSelect
             }
         }
