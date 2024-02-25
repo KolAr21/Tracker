@@ -43,7 +43,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Введите название трекера",
+            string: NSLocalizedString("newHabbit.namePlaceholder", comment: "Text displayed on tracker"),
             attributes:
                 [NSAttributedString.Key.foregroundColor: UIColor.trackerGray,
                  NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular)]
@@ -61,7 +61,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     private lazy var textFieldLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = NSLocalizedString("newHabbit.nameWarning", comment: "Text displayed on tracker")
         label.textColor = .trackerRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .center
@@ -118,7 +118,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.layer.borderColor = UIColor.trackerRed.cgColor
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerRed, for: .normal)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("newHabbit.cancel", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         return button
@@ -130,7 +130,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.backgroundColor = .trackerGray
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("newHabbit.create", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapCreateHabitButton), for: .touchUpInside)
         return button
@@ -167,16 +167,28 @@ final class NewHabitViewImp: UIView, NewHabitView {
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            textFieldStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 16),
-            textFieldStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 24),
-            textFieldStackView.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            textFieldStackView.leadingAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.leadingAnchor,
+                constant: 16
+            ),
+            textFieldStackView.topAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.topAnchor,
+                constant: 24
+            ),
+            textFieldStackView.trailingAnchor.constraint(
+                equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
+                constant: -16
+            ),
             nameHabitTextField.heightAnchor.constraint(equalToConstant: 75),
             textFieldLabel.bottomAnchor.constraint(equalTo: textFieldStackView.bottomAnchor, constant: -8),
 
             tableView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 16),
             tableView.topAnchor.constraint(equalTo: textFieldStackView.bottomAnchor, constant: 24),
             tableView.heightAnchor.constraint(equalToConstant: parameters.count == 2 ? 150 : 75),
-            tableView.trailingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.trailingAnchor.constraint(
+                equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
+                constant: -16
+            ),
 
             buttonsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
@@ -266,7 +278,13 @@ final class NewHabitViewImp: UIView, NewHabitView {
         )
 
         if parameters.count == 2 {
-            newTracker = Tracker(id: UUID(), name: text, color: Constants.color[colorIndex], emoji: Constants.emoji[emojiIndex], schedule: selectWeekdays)
+            newTracker = Tracker(
+                id: UUID(),
+                name: text,
+                color: Constants.color[colorIndex],
+                emoji: Constants.emoji[emojiIndex],
+                schedule: selectWeekdays
+            )
         }
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
         delegate?.didTapCreateButton(category: trackerCategory)
@@ -277,7 +295,11 @@ final class NewHabitViewImp: UIView, NewHabitView {
 // MARK: - UITextFieldDelegate
 
 extension NewHabitViewImp: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         isEnableButton()
         guard let text = textField.text else {
             return false
@@ -327,7 +349,10 @@ extension NewHabitViewImp: UITableViewDataSource {
         if indexPath.row == parameters.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
         }
-        cell.configure(parameter: indexPath.row == 1 ? "Расписание" : "Категория")
+        cell.configure(parameter: indexPath.row == 1 ?
+                        NSLocalizedString("schedule.title", comment: "Text displayed on tracker") :
+                        NSLocalizedString("category.title", comment: "Text displayed on tracker")
+        )
         return cell
     }
 }
@@ -352,7 +377,10 @@ extension NewHabitViewImp: UITableViewDelegate {
 // MARK: - UICollectionViewDataSource
 
 extension NewHabitViewImp: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(
@@ -413,7 +441,9 @@ extension NewHabitViewImp: UICollectionViewDataSource {
 
 extension NewHabitViewImp: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: false) })
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
+            collectionView.deselectItem(at: $0, animated: false)
+        })
         return true
     }
 
@@ -445,7 +475,11 @@ extension NewHabitViewImp: UICollectionViewDelegateFlowLayout {
         CGSize(width: collectionView.frame.width - 44, height: 18)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let width = collectionView.frame.width - 82
         return CGSize(width: width/6, height: width/6)
     }

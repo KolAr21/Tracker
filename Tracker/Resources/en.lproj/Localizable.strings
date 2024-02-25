@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Арина Колганова on 24.02.2024.
+  
+*/
+
+"onboarding.firstPage" = "Track only what you want";
+"onboarding.secondPage" = "Even if it's not liters of water and yoga";
+"onboarding.button" = "These are technologies!";
+
+"main.title" = "Trackers";
+"main.empty" = "What are we going to track?";
+"main.emptyFind" = "Nothing was found";
+"main.find" = "Find";
+"main.cancel" = "Cancel";
+
+"navigation.trackers" = "Trackers";
+"navigation.statistic" = "Statistics";
+
+"createTracker.title" = "Creating a tracker";
+"createTracker.habbit" = "Habbit";
+"createTracker.event" = "Irregular events";
+
+"newHabbit.titleFirst" = "New habbit";
+"newHabbit.titleSecond" = "New irregular event";
+"newHabbit.namePlaceholder" = "Enter the name of the tracker";
+"newHabbit.nameWarning" = "The limit is 38 characters";
+"newHabbit.emoji" = "Emoji";
+"newHabbit.color" = "Color";
+"newHabbit.everyDay" = "Every day";
+"newHabbit.cancel" = "Cancel";
+"newHabbit.create" = "Create";
+
+"category.title" = "Category";
+"category.empty" = "Habits and events can be combined in meaning";
+"category.button" = "Add a category";
+
+"newCategory.title" = "New category";
+"newCategory.namePlaceholder" = "Enter the name of the category";
+"newCategory.button" = "Done";
+
+"schedule.title" = "Schedule";
+"schedule.button" = "Done";

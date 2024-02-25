@@ -34,7 +34,7 @@ final class NewCategoryViewController<View: NewCategoryView>: BaseViewController
     // MARK: - Private methods
 
     private func setupBar() {
-        title = "Категория"
+        title = NSLocalizedString("category.title", comment: "Text displayed on tracker")
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)

@@ -1,0 +1,45 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Арина Колганова on 24.02.2024.
+  
+*/
+
+"onboarding.firstPage" = "Отслеживайте только то, что хотите";
+"onboarding.secondPage" = "Даже если это не литры воды и йога";
+"onboarding.button" = "Вот это технологии!";
+
+"main.title" = "Трекеры";
+"main.empty" = "Что будем отслеживать?";
+"main.emptyFind" = "Ничего не найдено";
+"main.find" = "Поиск";
+"main.cancel" = "Отменить";
+
+"navigation.trackers" = "Трекеры";
+"navigation.statistic" = "Статистика";
+
+"createTracker.title" = "Создание трекера";
+"createTracker.habbit" = "Привычка";
+"createTracker.event" = "Нерегулярные событие";
+
+"newHabbit.titleFirst" = "Новая привычка";
+"newHabbit.titleSecond" = "Новое нерегулярное событие";
+"newHabbit.namePlaceholder" = "Введите название трекера";
+"newHabbit.nameWarning" = "Ограничение 38 символов";
+"newHabbit.emoji" = "Emoji";
+"newHabbit.everyDay" = "Каждый день";
+"newHabbit.color" = "Цвет";
+"newHabbit.cancel" = "Отменить";
+"newHabbit.create" = "Создать";
+
+"category.title" = "Категория";
+"category.empty" = "Привычки и события можно объединить по смыслу";
+"category.button" = "Добавить категорию";
+
+"newCategory.title" = "Новая категория";
+"newCategory.namePlaceholder" = "Введите название категории";
+"newCategory.button" = "Готово";
+
+"schedule.title" = "Расписание";
+"schedule.button" = "Готово";

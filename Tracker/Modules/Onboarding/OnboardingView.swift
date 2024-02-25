@@ -35,7 +35,7 @@ final class OnboardingViewImp: UIView, OnboardingView {
 
     private lazy var trackerButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboarding.button", comment: "Text displayed on onboarding"), for: .normal)
         button.backgroundColor = .trackerBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)

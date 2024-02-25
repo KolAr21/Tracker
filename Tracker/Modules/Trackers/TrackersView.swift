@@ -47,7 +47,7 @@ final class TrackersViewImp: UIView, TrackersView {
         search.layer.cornerRadius = 16
         search.returnKeyType = .done
         search.attributedPlaceholder = NSAttributedString(
-            string: "Поиск",
+            string: NSLocalizedString("main.find", comment: "Text displayed on tracker"),
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.trackerGray]
         )
         search.delegate = self
@@ -56,7 +56,7 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("main.cancel", comment: "Text displayed on tracker"), for: .normal)
         button.tintColor = .trackerBlue
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         button.isHidden = true
@@ -86,7 +86,7 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
@@ -151,10 +151,10 @@ final class TrackersViewImp: UIView, TrackersView {
         switch placeholder {
         case .emptyCategories:
             placeholderImageView.image = UIImage(named: "PlaceholderTracker")
-            placeholderLabel.text = "Что будем отслеживать?"
+            placeholderLabel.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
         case .notFoundCategories:
             placeholderImageView.image = UIImage(named: "SearchPlaceholder")
-            placeholderLabel.text = "Ничего не найдено"
+            placeholderLabel.text = NSLocalizedString("main.emptyFind", comment: "Text displayed on tracker")
         }
     }
 
@@ -237,7 +237,6 @@ extension TrackersViewImp: UICollectionViewDataSource {
         }
 
         headerView.configure(text: visibleCategories[indexPath.section].title)
-//        headerView.titleLabel.text = visibleCategories[indexPath.section].title
         return headerView
     }
 }

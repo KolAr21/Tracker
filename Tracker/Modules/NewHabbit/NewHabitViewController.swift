@@ -45,7 +45,9 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
             }
 
             self.rootView.selectCategory = dataProvider.selectCategory
-            self.rootView.selectSchedule = dataProvider.selectWeekdays.count == 7 ? "Каждый день" : dataProvider.selectWeekdays.map({$0.shortName}).joined(separator: ", ")
+            self.rootView.selectSchedule = dataProvider.selectWeekdays.count == 7 ?
+                NSLocalizedString("newHabbit.everyDay", comment: "Text displayed on tracker") :
+                dataProvider.selectWeekdays.map({$0.shortName}).joined(separator: ", ")
             self.rootView.selectWeekdays = dataProvider.selectWeekdays
             self.rootView.isEnableButton()
             self.rootView.reloadData()
@@ -56,7 +58,9 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
 
     private func setupBar() {
         navigationItem.hidesBackButton = true
-        title = parameters.count == 2 ? "Новая привычка" : "Новое нерегулярное событие"
+        title = parameters.count == 2 ?
+            NSLocalizedString("newHabbit.titleFirst", comment: "Text displayed on tracker") :
+            NSLocalizedString("newHabbit.titleSecond", comment: "Text displayed on tracker")
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)

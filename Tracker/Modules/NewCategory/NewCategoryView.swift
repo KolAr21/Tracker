@@ -24,7 +24,7 @@ final class NewCategoryViewImp: UIView, NewCategoryView {
     private lazy var categoryTextField: UITextField = {
         let textField = UITextField()
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Введите название категории",
+            string: NSLocalizedString("newCategory.namePlaceholder", comment: "Text displayed on tracker"),
             attributes:
                 [NSAttributedString.Key.foregroundColor: UIColor.trackerGray,
                  NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular)]
@@ -46,7 +46,7 @@ final class NewCategoryViewImp: UIView, NewCategoryView {
         button.backgroundColor = .trackerGray
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("newCategory.button", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

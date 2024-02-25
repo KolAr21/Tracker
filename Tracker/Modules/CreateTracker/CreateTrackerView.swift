@@ -23,7 +23,7 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
 
     private lazy var habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("createTracker.habbit", comment: "Text displayed on tracker"), for: .normal)
         setSettingsButton(button: button)
         button.addTarget(self, action: #selector(openNewHabit), for: .touchUpInside)
         return button
@@ -31,7 +31,7 @@ final class CreateTrackerViewImp: UIView, CreateTrackerView {
 
     private lazy var eventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярные событие", for: .normal)
+        button.setTitle(NSLocalizedString("createTracker.event", comment: "Text displayed on tracker"), for: .normal)
         setSettingsButton(button: button)
         button.addTarget(self, action: #selector(openIrregularEvent), for: .touchUpInside)
         return button

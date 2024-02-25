@@ -23,9 +23,9 @@ enum RootTab: Int {
     private var title: String? {
         switch self {
         case .tracker:
-            return "Трекеры"
+            return NSLocalizedString("navigation.trackers", comment: "Text displayed on tracker")
         case .statistic:
-            return "Статистика"
+            return NSLocalizedString("navigation.statistic", comment: "Text displayed on tracker")
         }
     }
 
