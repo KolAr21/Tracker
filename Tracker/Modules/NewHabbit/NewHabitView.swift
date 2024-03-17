@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import YandexMobileMetrica
 
 protocol NewHabitView: UIView {
     var selectSchedule: String? { get set }
@@ -15,6 +16,7 @@ protocol NewHabitView: UIView {
     var delegate: NewHabitViewDelegate? { get set }
 
     func setView()
+    func setSettings(model: TrackerModel?)
     func reloadData()
     func isEnableButton()
 }
@@ -24,6 +26,8 @@ protocol NewHabitViewDelegate: AnyObject {
     func didTapCategoryButton()
     func didTapCancelButton()
     func didTapCreateButton(category: TrackerCategory)
+    func didTapSaveButton(tracker: Tracker, category: String)
+    func updateSelectItem(category: String, weekdays: [Weekday])
 }
 
 final class NewHabitViewImp: UIView, NewHabitView {
@@ -34,16 +38,39 @@ final class NewHabitViewImp: UIView, NewHabitView {
 
     weak var delegate: NewHabitViewDelegate?
 
+    private var model: TrackerModel?
+
     private lazy var scrollView : UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
 
+    private lazy var topStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.distribution = UIStackView.Distribution.fill
+        stackView.alignment = UIStackView.Alignment.fill
+        stackView.spacing = 40
+        stackView.addArrangedSubview(dayLabel)
+        stackView.addArrangedSubview(textFieldStackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
+    private lazy var dayLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
+
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
         textField.attributedPlaceholder = NSAttributedString(
-            string: NSLocalizedString("newHabbit.namePlaceholder", comment: "Text displayed on tracker"),
+            string: NSLocalizedString("newHabit.namePlaceholder", comment: "Text displayed on tracker"),
             attributes:
                 [NSAttributedString.Key.foregroundColor: UIColor.trackerGray,
                  NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular)]
@@ -55,20 +82,19 @@ final class NewHabitViewImp: UIView, NewHabitView {
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
 
     private lazy var textFieldLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("newHabbit.nameWarning", comment: "Text displayed on tracker")
+        label.text = NSLocalizedString("newHabit.nameWarning", comment: "Text displayed on tracker")
         label.textColor = .trackerRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
         return label
-    } ()
+    }()
 
     private lazy var textFieldStackView: UIStackView = {
         let stackView = UIStackView()
@@ -118,7 +144,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.layer.borderColor = UIColor.trackerRed.cgColor
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerRed, for: .normal)
-        button.setTitle(NSLocalizedString("newHabbit.cancel", comment: "Text displayed on tracker"), for: .normal)
+        button.setTitle(NSLocalizedString("newHabit.cancel", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         return button
@@ -130,7 +156,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         button.backgroundColor = .trackerGray
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
-        button.setTitle(NSLocalizedString("newHabbit.create", comment: "Text displayed on tracker"), for: .normal)
+        button.setTitle(NSLocalizedString("newHabit.create", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapCreateHabitButton), for: .touchUpInside)
         return button
@@ -157,7 +183,7 @@ final class NewHabitViewImp: UIView, NewHabitView {
         scrollView.backgroundColor = .trackerWhite
         addSubview(scrollView)
 
-        scrollView.addSubview(textFieldStackView)
+        scrollView.addSubview(topStackView)
         scrollView.addSubview(tableView)
         scrollView.addSubview(collectionView)
         addSubview(buttonsStackView)
@@ -167,15 +193,15 @@ final class NewHabitViewImp: UIView, NewHabitView {
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            textFieldStackView.leadingAnchor.constraint(
+            topStackView.leadingAnchor.constraint(
                 equalTo: scrollView.contentLayoutGuide.leadingAnchor,
                 constant: 16
             ),
-            textFieldStackView.topAnchor.constraint(
+            topStackView.topAnchor.constraint(
                 equalTo: scrollView.contentLayoutGuide.topAnchor,
                 constant: 24
             ),
-            textFieldStackView.trailingAnchor.constraint(
+            topStackView.trailingAnchor.constraint(
                 equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
                 constant: -16
             ),
@@ -214,6 +240,32 @@ final class NewHabitViewImp: UIView, NewHabitView {
         addGestureRecognizer(recognizer)
     }
 
+    func setSettings(model: TrackerModel?) {
+        self.model = model
+        guard let model else {
+            return
+        }
+
+        dayLabel.isHidden = false
+        dayLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("countOfDays", comment: "Count of completed days"),
+            model.countDay
+        )
+
+        nameHabitTextField.text = model.name
+
+        selectCategory = model.category
+        selectSchedule = model.schedule
+        selectWeekdays = model.weekdays
+
+        collectionView.selectItem(at: IndexPath(row: model.emoji, section: 0), animated: true, scrollPosition: .right)
+        collectionView.selectItem(at: IndexPath(row: model.color, section: 1), animated: true, scrollPosition: .right)
+
+        createButton.titleLabel?.text = NSLocalizedString("newHabit.save", comment: "Text displayed on tracker")
+        createButton.isUserInteractionEnabled = true
+        createButton.backgroundColor = .trackerBlack
+    }
+
     func reloadData() {
         tableView.reloadData()
     }
@@ -237,7 +289,6 @@ final class NewHabitViewImp: UIView, NewHabitView {
                 return
             }
         }
-
         createButton.isUserInteractionEnabled = true
         createButton.backgroundColor = .trackerBlack
     }
@@ -270,25 +321,28 @@ final class NewHabitViewImp: UIView, NewHabitView {
         }
 
         var newTracker = Tracker(
-            id: UUID(),
+            id: model?.id ?? UUID(),
             name: text,
             color: Constants.color[colorIndex],
             emoji: Constants.emoji[emojiIndex],
-            schedule: Weekday.allCases
+            schedule: Weekday.allCases,
+            isFixed: false
         )
 
         if parameters.count == 2 {
             newTracker = Tracker(
-                id: UUID(),
+                id: model?.id ?? UUID(),
                 name: text,
                 color: Constants.color[colorIndex],
                 emoji: Constants.emoji[emojiIndex],
-                schedule: selectWeekdays
+                schedule: selectWeekdays,
+                isFixed: false
             )
         }
         let trackerCategory = TrackerCategory(title: category, trackersList: [newTracker])
-        delegate?.didTapCreateButton(category: trackerCategory)
+        model == nil ? delegate?.didTapCreateButton(category: trackerCategory) : delegate?.didTapSaveButton(tracker: newTracker, category: category)
         delegate?.didTapCancelButton()
+        YMMYandexMetrica.reportEvent("click", parameters: ["screen": "NewHabit", "item": "add_track"])
     }
 }
 
@@ -342,16 +396,21 @@ extension NewHabitViewImp: UITableViewDataSource {
         if indexPath.row == 0 {
             cell.selectLabel.isHidden = selectCategory == nil ? true : false
             cell.selectLabel.text = selectCategory ?? ""
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         } else {
             cell.selectLabel.isHidden = selectSchedule == nil ? true : false
             cell.selectLabel.text = selectSchedule ?? ""
         }
         if indexPath.row == parameters.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
+            cell.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         }
-        cell.configure(parameter: indexPath.row == 1 ?
-                        NSLocalizedString("schedule.title", comment: "Text displayed on tracker") :
-                        NSLocalizedString("category.title", comment: "Text displayed on tracker")
+        cell.configure(
+            parameter: indexPath.row == 1 ?
+                NSLocalizedString("schedule.title", comment: "Text displayed on tracker") :
+                NSLocalizedString("category.title", comment: "Text displayed on tracker")
         )
         return cell
     }
@@ -370,6 +429,7 @@ extension NewHabitViewImp: UITableViewDelegate {
             delegate?.didTapCategoryButton()
             return
         }
+
         delegate?.didTapScheduleButton()
     }
 }

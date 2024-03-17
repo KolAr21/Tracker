@@ -6,20 +6,24 @@
 //
 
 import UIKit
+import YandexMobileMetrica
 
 protocol TrackersView: UIView {
     var delegate: TrackersViewDelegate? { get set }
 
     func setView()
+    func updateCollection()
     func updateVisibleCategories(newVisibleCategories: [TrackerCategory])
     func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder)
 }
 
 protocol TrackersViewDelegate: AnyObject {
     func enableDoneButton(completion: (Bool) -> ())
-    func reloadVisibleCategories(text: String?)
+    func reloadVisibleCategories(text: String?, isFilter: Bool)
     func isTrackerCompleteToday(trackerId: UUID) -> Bool
     func countCompletedTracker(trackerId: UUID) -> Int
+    func pinTracker(trackerId: UUID?)
+    func filterDidTap()
 }
 
 final class TrackersViewImp: UIView, TrackersView {
@@ -103,6 +107,18 @@ final class TrackersViewImp: UIView, TrackersView {
         return stackView
     }()
 
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(NSLocalizedString("main.filters", comment: "Text displayed on tracker"), for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = .trackerBlue
+        button.setTitleColor(.trackerFontWhite, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.addTarget(self, action: #selector(filtersDidTap), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
     func setView() {
         backgroundColor = .trackerWhite
         collectionView.dataSource = self
@@ -111,6 +127,7 @@ final class TrackersViewImp: UIView, TrackersView {
         addSubview(searchStackView)
         addSubview(placeholderStackView)
         addSubview(collectionView)
+        addSubview(filterButton)
 
         NSLayoutConstraint.activate([
             searchStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -124,13 +141,22 @@ final class TrackersViewImp: UIView, TrackersView {
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: searchStackView.bottomAnchor, constant: 34),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
 
         didHiddenPlaceholder(placeholder: Placeholder.emptyCategories)
 
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         addGestureRecognizer(recognizer)
+    }
+
+    func updateCollection() {
+        collectionView.contentInset.bottom = filterButton.frame.height
     }
 
     func updateVisibleCategories(newVisibleCategories: [TrackerCategory]) {
@@ -147,6 +173,7 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private func didHiddenPlaceholder(placeholder: Placeholder) {
         placeholderStackView.isHidden = !visibleCategories.isEmpty
+        filterButton.isHidden = visibleCategories.isEmpty
 
         switch placeholder {
         case .emptyCategories:
@@ -158,6 +185,11 @@ final class TrackersViewImp: UIView, TrackersView {
         }
     }
 
+    @objc private func filtersDidTap() {
+        delegate?.filterDidTap()
+        YMMYandexMetrica.reportEvent("click", parameters: ["screen": "Main", "item": "filter"])
+    }
+
     @objc private func viewDidTap() {
         searchTextField.resignFirstResponder()
     }
@@ -165,7 +197,7 @@ final class TrackersViewImp: UIView, TrackersView {
     @objc private func cancelDidTap() {
         searchTextField.resignFirstResponder()
         searchTextField.text = ""
-        delegate?.reloadVisibleCategories(text: nil)
+        delegate?.reloadVisibleCategories(text: nil, isFilter: false)
     }
 }
 
@@ -210,8 +242,10 @@ extension TrackersViewImp: UICollectionViewDataSource {
                 name: tracker.name,
                 color: tracker.color,
                 emoji: tracker.emoji,
-                schedule: tracker.schedule
+                schedule: tracker.schedule,
+                isFixed: tracker.isFixed
             ),
+            category: visibleCategories[indexPath.section].title,
             isDoneToday: isDone,
             completedDays: count,
             indexPath: indexPath
@@ -244,8 +278,6 @@ extension TrackersViewImp: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension TrackersViewImp: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
-
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -299,7 +331,7 @@ extension TrackersViewImp: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         let text = (searchTextField.text ?? "").lowercased()
         searchTextField.resignFirstResponder()
-        delegate?.reloadVisibleCategories(text: text)
+        delegate?.reloadVisibleCategories(text: text, isFilter: false)
         return true
     }
 }

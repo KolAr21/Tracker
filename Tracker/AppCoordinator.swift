@@ -36,8 +36,9 @@ final class AppCoordinator: BaseCoordinator<CoordinatorContext> {
 
         let navVC = assembly.rootNavigationController(vc: trackerVC)
         navVC.tabBarItem = RootTab.tracker.tabBarItem
-        statisticVC.tabBarItem = RootTab.statistic.tabBarItem
-        tabVC.setViewControllers([navVC, statisticVC], animated: false)
+        let navStatVC = assembly.rootNavigationController(vc: statisticVC)
+        navStatVC.tabBarItem = RootTab.statistic.tabBarItem
+        tabVC.setViewControllers([navVC, navStatVC], animated: false)
         setRoot(viewController: tabVC)
     }
 

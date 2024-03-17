@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import YandexMobileMetrica
 
 final class TrackersViewController<View: TrackersView>: BaseViewController<View> {
     var completedTrackers: [TrackerRecord] = []
     var categories: [TrackerCategory] = []
     var openCreateTracker: (() -> Void)?
+    var openEditHabitClosure: ((TrackerModel) -> Void)?
+    var openFiltersClosure: (() -> Void)?
 
     private var trackersObserver: NSObjectProtocol?
+    private var filter: Filters = .all
 
     private let dataProvider: DataProvider
 
@@ -59,20 +63,51 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            guard let self = self else {
+            guard let self else {
                 return
             }
 
-            convertCoreDataInModel()
-            datePickerValueChanged()
+            updateTrackers()
         }
+
+        YMMYandexMetrica.reportEvent("open", parameters: ["screen": "Main"])
+    }
+
+    override func viewDidLayoutSubviews() {
+        rootView.updateCollection()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        YMMYandexMetrica.reportEvent("close", parameters: ["screen": "Main"])
     }
 
     // MARK: - Private methods
 
+    private func updateTrackers() {
+        filter = dataProvider.selectFilter
+        convertCoreDataInModel()
+        if !categories.isEmpty {
+            switch filter {
+            case .all:
+                convertCoreDataInModel()
+            case .today:
+                datePicker.date = Date()
+                dataProvider.updateFilter(filter: .all)
+            case .complete:
+                updateVisibleTracker(isComplete: true)
+            case .uncomplete:
+                updateVisibleTracker(isComplete: false)
+            }
+            reloadVisibleCategories(text: nil, isFilter: true)
+        } else {
+            reloadVisibleCategories(text: nil, isFilter: false)
+        }
+    }
+
     private func setupBar() {
         let rectInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-        let addButtonImage = UIImage(named: "AddTracker")?.withAlignmentRectInsets(rectInsets)
+        let addButtonImage = UIImage(named: "AddTracker")?.withAlignmentRectInsets(rectInsets).withTintColor(.trackerFontBlack)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: addButtonImage, style: .plain, target: self, action: #selector(createNewTracker))
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
@@ -90,7 +125,13 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         return trackerRecord.id == id && isSameDay
     }
 
+    private func isNotSameTracker(trackerRecord: TrackerRecord, id: UUID) -> Bool {
+        let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+        return trackerRecord.id != id && isSameDay
+    }
+
     private func convertCoreDataInModel() {
+        var categoryList: [Tracker] = []
         categories = dataProvider.trackerCategories.compactMap { category -> TrackerCategory? in
             guard let title = category.title, let trackers = category.trackers else {
                 return nil
@@ -107,9 +148,33 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
                     return nil
                 }
 
-                return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+                if trackerCoreData.isFixed {
+                    categoryList.append(Tracker(
+                        id: id,
+                        name: name,
+                        color: color,
+                        emoji: emoji,
+                        schedule: schedule,
+                        isFixed: trackerCoreData.isFixed
+                    ))
+                    return nil
+                }
+
+                return Tracker(
+                    id: id,
+                    name: name,
+                    color: color,
+                    emoji: emoji,
+                    schedule: schedule,
+                    isFixed: trackerCoreData.isFixed
+                )
+
             }
-            return TrackerCategory(title: title, trackersList: newTrackers)
+            return newTrackers.isEmpty ? nil : TrackerCategory(title: title, trackersList: newTrackers)
+        }
+
+        if !categoryList.isEmpty {
+            categories.insert(TrackerCategory(title: NSLocalizedString("tracker.category", comment: "Text displayed on tracker"), trackersList: categoryList), at: 0)
         }
     }
 
@@ -123,8 +188,25 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
         }
     }
 
+    private func updateVisibleTracker(isComplete: Bool) {
+        let index = Calendar.current.component(.weekday, from: datePicker.date)
+        var sortedCategories: [TrackerCategory] = []
+
+        for category in categories {
+            let sortedTrackerList = category.trackersList.filter {
+                isComplete ? isTrackerCompleteToday(trackerId: $0.id) : isTrackerUncompleteToday(trackerId: $0.id)
+            }
+
+            if !sortedTrackerList.isEmpty {
+                sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))
+            }
+        }
+
+        categories = sortedCategories
+    }
+
     @objc private func datePickerValueChanged() {
-        reloadVisibleCategories(text: nil)
+        updateTrackers()
     }
 
     @objc private func createNewTracker() {
@@ -135,7 +217,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 // MARK: - TrackersViewDelegate
 
 extension TrackersViewController: TrackersViewDelegate {
-    func reloadVisibleCategories(text: String?) {
+    func reloadVisibleCategories(text: String?, isFilter: Bool) {
         let index = Calendar.current.component(.weekday, from: datePicker.date)
         var sortedCategories: [TrackerCategory] = []
 
@@ -153,7 +235,7 @@ extension TrackersViewController: TrackersViewDelegate {
 
         rootView.reloadData(
             newCategories: sortedCategories,
-            placeholder: text != nil ? .notFoundCategories : .emptyCategories
+            placeholder: text != nil || isFilter ? .notFoundCategories : .emptyCategories
         )
     }
 
@@ -163,8 +245,18 @@ extension TrackersViewController: TrackersViewDelegate {
         }
     }
 
+    func isTrackerUncompleteToday(trackerId: UUID) -> Bool {
+        completedTrackers.contains { trackerRecord in
+            isNotSameTracker(trackerRecord: trackerRecord, id: trackerId)
+        }
+    }
+
     func enableDoneButton(completion: (Bool) -> ()) {
         completion(!(datePicker.date > Date()))
+    }
+
+    func filterDidTap() {
+        openFiltersClosure?()
     }
 }
 
@@ -193,5 +285,51 @@ extension TrackersViewController: TrackerCollectionCellDelegate {
             isSameTracker(trackerRecord: trackerRecord, id: id)
         }
         dataProvider.deleteRecordTracker(trackerRecord)
+        datePickerValueChanged()
+    }
+
+    func pinTracker(trackerId: UUID?) {
+        guard let trackerId else {
+            return
+        }
+
+        dataProvider.updateTracker(trackerId: trackerId)
+        convertCoreDataInModel()
+        datePickerValueChanged()
+    }
+
+    func editHabit(tracker: Tracker, category: String, countDay: Int) {
+        let model = TrackerModel(
+            id: tracker.id,
+            name: tracker.name,
+            category: category,
+            weekdays: tracker.schedule,
+            schedule: tracker.schedule.count == 7 ?
+                NSLocalizedString("newHabit.everyDay", comment: "Text displayed on tracker") :
+                tracker.schedule.map({$0.shortName}).joined(separator: ", "),
+            color: Constants.color.firstIndex(where: {$0 == tracker.color}) ?? 0,
+            emoji: Constants.emoji.firstIndex(where: {$0 == tracker.emoji}) ?? 0,
+            countDay: countDay
+        )
+        openEditHabitClosure?(model)
+    }
+
+    func deleteTracker(trackerID: UUID) {
+        let alert = UIAlertController(
+            title: nil,
+            message: "Уверены что хотите удалить трекер?",
+            preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(
+            title: "Удалить",
+            style: .destructive) { [weak self] _ in
+                self?.dataProvider.deleteTracker(trackerID)
+            }
+        alert.addAction(deleteAction)
+
+        let cancelAction = UIAlertAction(
+            title: "Отменить",
+            style: .cancel)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
     }
 }

@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import YandexMobileMetrica
 
 protocol TrackerCollectionCellDelegate: AnyObject {
     func completeTracker(id: UUID)
     func uncompleteTracker(id: UUID)
+    func pinTracker(trackerId: UUID?)
+    func editHabit(tracker: Tracker, category: String, countDay: Int)
+    func deleteTracker(trackerID: UUID)
 }
 
 protocol TrackerCollectionCellViewDelegate: AnyObject {
@@ -20,7 +24,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     var delegate: TrackerCollectionCellDelegate?
     var delegateView: TrackerCollectionCellViewDelegate?
 
-    private var tracker: Tracker?
+    var tracker: Tracker?
+    private var category: String?
+    private var countDays: Int?
     private var isDoneToday: Bool = false
     private var indexPath: IndexPath?
 
@@ -44,7 +50,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private lazy var trackerLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
-        label.textColor = .trackerWhite
+        label.textColor = .trackerFontWhite
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
@@ -71,7 +77,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     private lazy var dayLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .trackerBlack
+        label.textColor = .trackerFontBlack
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
@@ -99,6 +105,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        layer.cornerRadius = 18
 
         contentView.addSubview(topView)
         contentView.addSubview(bottomStackView)
@@ -134,9 +142,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(newTracker: Tracker, isDoneToday: Bool, completedDays: Int, indexPath: IndexPath) {
+    func configure(newTracker: Tracker, category: String, isDoneToday: Bool, completedDays: Int, indexPath: IndexPath) {
         tracker = newTracker
+        self.category = category
         self.isDoneToday = isDoneToday
+        countDays = completedDays
         self.indexPath = indexPath
 
         topView.backgroundColor = newTracker.color
@@ -160,6 +170,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             doneButton.layer.backgroundColor = UIColor.clear.cgColor
             doneButton.tintColor = newTracker.color
         }
+
+        let interaction = UIContextMenuInteraction(delegate: self)
+        topView.addInteraction(interaction)
     }
 
     func enabledDoneButton(isEnable: Bool) {
@@ -187,5 +200,26 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 
         isDoneToday ? delegate?.uncompleteTracker(id: tracker.id) : delegate?.completeTracker(id: tracker.id)
         delegateView?.reloadCell(indexPath: indexPath)
+        YMMYandexMetrica.reportEvent("click", parameters: ["screen": "Main", "item": "track"])
+    }
+}
+
+extension TrackerCollectionViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        UIContextMenuConfiguration(actionProvider: { actions in
+            UIMenu(children: [
+                UIAction(title: NSLocalizedString(self.tracker?.isFixed ?? false ?  "tracker.unpin" : "tracker.pin", comment: "Text displayed on tracker")) { [weak self] _ in
+                    self?.delegate?.pinTracker(trackerId: self?.tracker?.id)
+                },
+                UIAction(title: NSLocalizedString("tracker.edit", comment: "Text displayed on tracker")) { [weak self] _ in
+                    self?.delegate?.editHabit(tracker: (self?.tracker)!, category: self?.category ?? "", countDay: self?.countDays ?? 0)
+                    YMMYandexMetrica.reportEvent("click", parameters: ["screen": "Main", "item": "edit"])
+                },
+                UIAction(title: NSLocalizedString("tracker.delete", comment: "Text displayed on tracker"), attributes: .destructive) { [weak self] _ in
+                    self?.delegate?.deleteTracker(trackerID: self?.tracker?.id ?? UUID())
+                    YMMYandexMetrica.reportEvent("click", parameters: ["screen": "Main", "item": "delete"])
+                }
+            ])
+        })
     }
 }

@@ -13,6 +13,7 @@ protocol DataProviderProtocol {
     var selectWeekdays: [Weekday] { get }
     var selectCategory: String? { get }
     func addCategory(_ category: TrackerCategory) throws
+    func updateTracker(trackerId: UUID)
 }
 
 final class DataProvider: NSObject {
@@ -26,6 +27,7 @@ final class DataProvider: NSObject {
 
     private(set) var selectWeekdays: [Weekday] = []
     private(set) var selectCategory: String?
+    private(set) var selectFilter: Filters = .all
 
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
@@ -59,6 +61,11 @@ final class DataProvider: NSObject {
         NotificationCenter.default.post(name: DataProvider.DidChangeSelectItemsNotification, object: self)
     }
 
+    func updateFilter(filter: Filters) {
+        selectFilter = filter
+        NotificationCenter.default.post(name: DataProvider.DidChangeCategoriesNotification, object: self)
+    }
+
     func updateSelectCategory(newSelectCategory: String) {
         selectCategory = newSelectCategory
         NotificationCenter.default.post(name: DataProvider.DidChangeSelectItemsNotification, object: self)
@@ -67,6 +74,18 @@ final class DataProvider: NSObject {
     func removeSelectItems() {
         selectCategory = nil
         selectWeekdays = []
+    }
+
+    // MARK: - Private methods
+
+    private func saveContext() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                context.rollback()
+            }
+        }
     }
 }
 
@@ -78,15 +97,55 @@ extension DataProvider: DataProviderProtocol {
     }
 
     func addCategory(_ category: TrackerCategory) throws {
-        try trackerCategoryStore.addNewCategory(title: category.title, tracker: category.trackersList.first)
+        let categoryCoreData =  trackerCategoryStore.addNewCategory(title: category.title)
+        guard let tracker = category.trackersList.first else {
+            categoryCoreData.trackers = NSSet()
+            saveContext()
+            return
+        }
+
+        let trackerCoreData = trackerStore.createTracker(tracker: tracker)
+        categoryCoreData.addToTrackers(trackerCoreData)
+        saveContext()
     }
 
     func addRecordTracker(_ record: TrackerRecord) throws {
         trackerRecordStore.addTrackerRecord(tracker: record)
+        NotificationCenter.default.post(name: DataProvider.DidChangeCategoriesNotification, object: self)
     }
 
     func deleteRecordTracker(_ record: TrackerRecord) {
         trackerRecordStore.deleteTrackerRecord(trackerRecord: record)
+        NotificationCenter.default.post(name: DataProvider.DidChangeCategoriesNotification, object: self)
+    }
+
+    func deleteTracker(_ trackerID: UUID) {
+        trackerStore.deleteTracker(trackerID: trackerID)
+    }
+
+    func updateTracker(trackerId: UUID) {
+        guard let trackerCoreData = trackerStore.findTracker(trackerId: trackerId) else {
+            return
+        }
+
+        trackerCoreData.isFixed = !trackerCoreData.isFixed
+        saveContext()
+
+        NotificationCenter.default.post(name: DataProvider.DidChangeCategoriesNotification, object: self)
+    }
+
+    func saveTracker(tracker: Tracker, category: String) {
+        guard let trackerCoreData = trackerStore.findTracker(trackerId: tracker.id) else {
+            return
+        }
+
+        trackerCoreData.category?.title = category
+        trackerCoreData.schedule = tracker.schedule as NSObject
+        trackerCoreData.color = tracker.color
+        trackerCoreData.emoji = tracker.emoji
+        saveContext()
+
+        NotificationCenter.default.post(name: DataProvider.DidChangeCategoriesNotification, object: self)
     }
 }
 

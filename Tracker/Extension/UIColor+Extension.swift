@@ -35,4 +35,13 @@ extension UIColor {
     static var collectionLightPink: UIColor { UIColor(named: "CollectionLightPink") ?? UIColor.systemPink }
     static var collectionLightMidnight: UIColor { UIColor(named: "CollectionLightMidnight") ?? UIColor.systemBlue }
     static var collectionPastelPink: UIColor { UIColor(named: "CollectionPastelPink") ?? UIColor.systemPink }
+
+    static var trackerFontWhite: UIColor { UIColor(named: "FontWhite") ?? UIColor.white }
+    static var trackerFontBlack: UIColor { UIColor(named: "FontBlack") ?? UIColor.black }
+
+    static var trackerBorderGray: UIColor { UIColor(named: "BorderGray") ?? UIColor.black }
+
+    static var trackerGradientRed: UIColor { UIColor(named: "GradientRed") ?? UIColor.red }
+    static var trackerGradientGreen: UIColor { UIColor(named: "GradientGreen") ?? UIColor.green }
+    static var trackerGradientBlue: UIColor { UIColor(named: "GradientBlue") ?? UIColor.blue }
 }

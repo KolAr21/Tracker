@@ -17,7 +17,8 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
                 parameters: [
                     NSLocalizedString("category.title", comment: "Text displayed on tracker"),
                     NSLocalizedString("schedule.title", comment: "Text displayed on tracker")
-                ]
+                ],
+                model: nil
             )
             guard let newHabitVC = coordinator.make() else {
                 return
@@ -29,7 +30,8 @@ final class CreateTrackerCoordinator: BaseCoordinator<CreateTrackerCoordinator.C
             let coordinator = self.assembly.newHabitCoordinator(
                 parameters: [
                     NSLocalizedString("category.title", comment: "Text displayed on tracker")
-                ]
+                ],
+                model: nil
             )
             guard let newHabitVC = coordinator.make() else {
                 return

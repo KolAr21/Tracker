@@ -13,7 +13,7 @@ final class TabBarController: UITabBarController {
 
         tabBar.backgroundColor = .trackerWhite
         tabBar.layer.borderWidth = 0.5
-        tabBar.layer.borderColor = UIColor.trackerGray.cgColor
+        tabBar.layer.borderColor = UIColor.trackerBorderGray.cgColor
         tabBar.clipsToBounds = true
     }
 }

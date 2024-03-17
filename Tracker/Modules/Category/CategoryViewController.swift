@@ -48,7 +48,7 @@ final class CategoryViewController: UIViewController {
 
     private lazy var addButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .trackerBlack
+        button.backgroundColor = .trackerFontBlack
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
         button.setTitle(NSLocalizedString("category.button", comment: "Text displayed on tracker"), for: .normal)
