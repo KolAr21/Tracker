@@ -140,6 +140,7 @@ extension DataProvider: DataProviderProtocol {
         }
 
         trackerCoreData.category?.title = category
+        trackerCoreData.name = tracker.name
         trackerCoreData.schedule = tracker.schedule as NSObject
         trackerCoreData.color = tracker.color
         trackerCoreData.emoji = tracker.emoji
