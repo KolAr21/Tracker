@@ -86,22 +86,30 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 
     private func updateTrackers() {
         filter = dataProvider.selectFilter
+        if filter == .today {
+            datePicker.date = Date()
+        }
         convertCoreDataInModel()
+        reloadVisibleCategories(text: nil)
+
         if !categories.isEmpty {
             switch filter {
             case .all:
-                convertCoreDataInModel()
+                break
             case .today:
-                datePicker.date = Date()
                 dataProvider.updateFilter(filter: .all)
+                datePickerValueChanged()
             case .complete:
                 updateVisibleTracker(isComplete: true)
             case .uncomplete:
                 updateVisibleTracker(isComplete: false)
             }
-            reloadVisibleCategories(text: nil, isFilter: true)
+            reloadData(isFilter: true)
         } else {
-            reloadVisibleCategories(text: nil, isFilter: false)
+            if filter == .today {
+                dataProvider.updateFilter(filter: .all)
+            }
+            reloadData(isFilter: false)
         }
     }
 
@@ -189,7 +197,6 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     }
 
     private func updateVisibleTracker(isComplete: Bool) {
-        let index = Calendar.current.component(.weekday, from: datePicker.date)
         var sortedCategories: [TrackerCategory] = []
 
         for category in categories {
@@ -217,7 +224,14 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 // MARK: - TrackersViewDelegate
 
 extension TrackersViewController: TrackersViewDelegate {
-    func reloadVisibleCategories(text: String?, isFilter: Bool) {
+    func reloadData(isFilter: Bool) {
+        rootView.reloadData(
+            newCategories: categories,
+            placeholder: isFilter ? .notFoundCategories : .emptyCategories
+        )
+    }
+
+    func reloadVisibleCategories(text: String?) {
         let index = Calendar.current.component(.weekday, from: datePicker.date)
         var sortedCategories: [TrackerCategory] = []
 
@@ -232,11 +246,7 @@ extension TrackersViewController: TrackersViewDelegate {
                 sortedCategories.append(TrackerCategory(title: category.title, trackersList: sortedTrackerList))
             }
         }
-
-        rootView.reloadData(
-            newCategories: sortedCategories,
-            placeholder: text != nil || isFilter ? .notFoundCategories : .emptyCategories
-        )
+        categories = sortedCategories
     }
 
     func isTrackerCompleteToday(trackerId: UUID) -> Bool {
@@ -246,8 +256,8 @@ extension TrackersViewController: TrackersViewDelegate {
     }
 
     func isTrackerUncompleteToday(trackerId: UUID) -> Bool {
-        completedTrackers.contains { trackerRecord in
-            isNotSameTracker(trackerRecord: trackerRecord, id: trackerId)
+        !completedTrackers.contains { trackerRecord in
+            isSameTracker(trackerRecord: trackerRecord, id: trackerId)
         }
     }
 

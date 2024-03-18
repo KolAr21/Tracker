@@ -18,8 +18,9 @@ protocol TrackersView: UIView {
 }
 
 protocol TrackersViewDelegate: AnyObject {
+    func reloadData(isFilter: Bool)
+    func reloadVisibleCategories(text: String?)
     func enableDoneButton(completion: (Bool) -> ())
-    func reloadVisibleCategories(text: String?, isFilter: Bool)
     func isTrackerCompleteToday(trackerId: UUID) -> Bool
     func countCompletedTracker(trackerId: UUID) -> Int
     func pinTracker(trackerId: UUID?)
@@ -173,15 +174,16 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private func didHiddenPlaceholder(placeholder: Placeholder) {
         placeholderStackView.isHidden = !visibleCategories.isEmpty
-        filterButton.isHidden = visibleCategories.isEmpty
 
         switch placeholder {
         case .emptyCategories:
             placeholderImageView.image = UIImage(named: "PlaceholderTracker")
             placeholderLabel.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
+            filterButton.isHidden = false
         case .notFoundCategories:
             placeholderImageView.image = UIImage(named: "SearchPlaceholder")
             placeholderLabel.text = NSLocalizedString("main.emptyFind", comment: "Text displayed on tracker")
+            filterButton.isHidden = visibleCategories.isEmpty
         }
     }
 
@@ -197,7 +199,8 @@ final class TrackersViewImp: UIView, TrackersView {
     @objc private func cancelDidTap() {
         searchTextField.resignFirstResponder()
         searchTextField.text = ""
-        delegate?.reloadVisibleCategories(text: nil, isFilter: false)
+        delegate?.reloadVisibleCategories(text: nil)
+        delegate?.reloadData(isFilter: false)
     }
 }
 
@@ -331,7 +334,8 @@ extension TrackersViewImp: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         let text = (searchTextField.text ?? "").lowercased()
         searchTextField.resignFirstResponder()
-        delegate?.reloadVisibleCategories(text: text, isFilter: false)
+        delegate?.reloadVisibleCategories(text: text)
+        delegate?.reloadData(isFilter: false)
         return true
     }
 }
