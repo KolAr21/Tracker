@@ -11,6 +11,7 @@ protocol StatisticView: UIView {
     var delegate: StatisticViewDelegate? { get set }
 
     func setView()
+    func reload()
 }
 
 protocol StatisticViewDelegate: AnyObject {
@@ -60,6 +61,10 @@ final class StatisticViewImp: UIView, StatisticView {
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
         ])
+    }
+
+    func reload() {
+        collectionView.reloadData()
     }
 }
 

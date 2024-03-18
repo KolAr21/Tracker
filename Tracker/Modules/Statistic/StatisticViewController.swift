@@ -10,18 +10,11 @@ import UIKit
 final class StatisticViewController<View: StatisticView>: BaseViewController<View> {
     private let dataProvider: DataProvider
 
-    private var completedTrackers: [TrackerRecord]
+    private var completedTrackers: [TrackerRecord] = []
     private var trackersObserver: NSObjectProtocol?
 
     init(dataProvider: DataProvider) {
         self.dataProvider = dataProvider
-        completedTrackers = dataProvider.fetchedTrackerRecord().compactMap {
-            guard let id = $0.id, let date = $0.date else {
-                return nil
-            }
-
-            return TrackerRecord(id: id, date: date)
-        }
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -36,6 +29,29 @@ final class StatisticViewController<View: StatisticView>: BaseViewController<Vie
         rootView.delegate = self
         rootView.setView()
         setupBar()
+
+        trackersObserver = NotificationCenter.default.addObserver(
+            forName: DataProvider.DidChangeCategoriesNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else {
+                return
+            }
+
+            completedTrackers = fetchTrackerRecord()
+            rootView.reload()
+        }
+    }
+
+    private func fetchTrackerRecord() -> [TrackerRecord] {
+        dataProvider.fetchedTrackerRecord().compactMap {
+            guard let id = $0.id, let date = $0.date else {
+                return nil
+            }
+
+            return TrackerRecord(id: id, date: date)
+        }
     }
 
     private func setupBar() {
