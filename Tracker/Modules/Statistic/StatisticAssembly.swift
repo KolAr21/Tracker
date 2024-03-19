@@ -18,6 +18,6 @@ extension Assembly: StatisticAssembly {
     }
 
     func statisticVC() -> StatisticViewController<StatisticViewImp> {
-        .init()
+        .init(dataProvider: dataProvider)
     }
 }

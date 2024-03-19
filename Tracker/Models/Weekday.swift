@@ -17,7 +17,8 @@ enum Weekday: Int, CaseIterable, Codable {
     case Saturday
 
     var longName: String {
-        Calendar.current.weekdaySymbols[self.rawValue]
+        (Calendar.current.weekdaySymbols[self.rawValue].first?.uppercased() ?? "") +
+        Calendar.current.weekdaySymbols[self.rawValue].dropFirst()
     }
 
     var shortName: String {

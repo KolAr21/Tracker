@@ -32,7 +32,7 @@ final class ScheduleViewController<View: ScheduleView>: BaseViewController<View>
     // MARK: - Private methods
 
     private func setupBar() {
-        title = "Расписание"
+        title = NSLocalizedString("schedule.title", comment: "Text displayed on tracker")
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)

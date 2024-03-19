@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Арина Колганова on 24.02.2024.
+  
+*/
+
+"onboarding.firstPage" = "Отслеживайте только то, что хотите";
+"onboarding.secondPage" = "Даже если это не литры воды и йога";
+"onboarding.button" = "Вот это технологии!";
+
+"statistic.empty" = "Анализировать пока нечего";
+"statistic.period" = "Лучший период";
+"statistic.day" = "Идеальные дни";
+"statistic.complete" = "Трекеров завершено";
+"statistic.median" = "Среднее значение";
+
+"main.title" = "Трекеры";
+"main.empty" = "Что будем отслеживать?";
+"main.emptyFind" = "Ничего не найдено";
+"main.find" = "Поиск";
+"main.cancel" = "Отменить";
+"main.filters" = "Фильтры";
+
+"filters.all" = "Все трекеры";
+"filters.today" = "Трекеры на сегодня";
+"filters.complete" = "Завершенные";
+"filters.uncomplete" = "Не завершенные";
+
+"tracker.unpin" = "Открепить";
+"tracker.pin" = "Закрепить";
+"tracker.edit" = "Редактировать";
+"tracker.delete" = "Удалить";
+"tracker.category" = "Закрепленные";
+
+"navigation.trackers" = "Трекеры";
+"navigation.statistic" = "Статистика";
+
+"createTracker.title" = "Создание трекера";
+"createTracker.habit" = "Привычка";
+"createTracker.event" = "Нерегулярные событие";
+
+"newHabit.titleFirst" = "Новая привычка";
+"newHabit.titleSecond" = "Новое нерегулярное событие";
+"newHabit.titleThird" = "Редактирование привычки";
+"newHabit.namePlaceholder" = "Введите название трекера";
+"newHabit.nameWarning" = "Ограничение 38 символов";
+"newHabit.emoji" = "Emoji";
+"newHabit.everyDay" = "Каждый день";
+"newHabit.color" = "Цвет";
+"newHabit.cancel" = "Отменить";
+"newHabit.create" = "Создать";
+"newHabit.save" = "Сохранить";
+
+"category.title" = "Категория";
+"category.empty" = "Привычки и события можно объединить по смыслу";
+"category.button" = "Добавить категорию";
+
+"newCategory.title" = "Новая категория";
+"newCategory.namePlaceholder" = "Введите название категории";
+"newCategory.button" = "Готово";
+
+"schedule.title" = "Расписание";
+"schedule.button" = "Готово";

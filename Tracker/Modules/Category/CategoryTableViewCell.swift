@@ -47,7 +47,7 @@ final class CategoryTableViewCell: UITableViewCell {
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: "ScheduleCell")
+        super.init(style: .subtitle, reuseIdentifier: "CategoryCell")
         backgroundColor = .trackerBackground
 
         contentView.addSubview(stackView)

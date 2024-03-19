@@ -12,11 +12,13 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
     var onOpenCategory: (() -> Void)?
 
     private var parameters: [String]
+    private var model: TrackerModel?
     private var dataProvider: DataProvider
     private var itemsObserver: NSObjectProtocol?
 
-    init(parameters: [String], dataProvider: DataProvider) {
+    init(parameters: [String], model: TrackerModel?, dataProvider: DataProvider) {
         self.parameters = parameters
+        self.model = model
         self.dataProvider = dataProvider
 
         super.init(nibName: nil, bundle: nil)
@@ -32,6 +34,7 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
         rootView.parameters = parameters
         rootView.delegate = self
         rootView.setView()
+        rootView.setSettings(model: model)
 
         setupBar()
 
@@ -45,7 +48,9 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
             }
 
             self.rootView.selectCategory = dataProvider.selectCategory
-            self.rootView.selectSchedule = dataProvider.selectWeekdays.count == 7 ? "Каждый день" : dataProvider.selectWeekdays.map({$0.shortName}).joined(separator: ", ")
+            self.rootView.selectSchedule = dataProvider.selectWeekdays.count == 7 ?
+                NSLocalizedString("newHabit.everyDay", comment: "Text displayed on tracker") :
+                dataProvider.selectWeekdays.map({$0.shortName}).joined(separator: ", ")
             self.rootView.selectWeekdays = dataProvider.selectWeekdays
             self.rootView.isEnableButton()
             self.rootView.reloadData()
@@ -56,11 +61,18 @@ final class NewHabitViewController<View: NewHabitView>: BaseViewController<View>
 
     private func setupBar() {
         navigationItem.hidesBackButton = true
-        title = parameters.count == 2 ? "Новая привычка" : "Новое нерегулярное событие"
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)
         ]
+        guard model != nil else {
+            title = parameters.count == 2 ?
+                NSLocalizedString("newHabit.titleFirst", comment: "Text displayed on tracker") :
+                NSLocalizedString("newHabit.titleSecond", comment: "Text displayed on tracker")
+            return
+        }
+
+        title = NSLocalizedString("newHabit.titleThird", comment: "Text displayed on tracker")
     }
 }
 
@@ -82,5 +94,14 @@ extension NewHabitViewController: NewHabitViewDelegate {
 
     func didTapCreateButton(category: TrackerCategory) {
         try? dataProvider.addCategory(category)
+    }
+
+    func didTapSaveButton(tracker: Tracker, category: String) {
+        dataProvider.saveTracker(tracker: tracker, category: category)
+    }
+
+    func updateSelectItem(category: String, weekdays: [Weekday]) {
+        dataProvider.updateSelectCategory(newSelectCategory: category)
+        dataProvider.updateWeekdays(newSelectWeekdays: weekdays)
     }
 }

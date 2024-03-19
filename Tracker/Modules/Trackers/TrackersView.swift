@@ -6,20 +6,25 @@
 //
 
 import UIKit
+import YandexMobileMetrica
 
 protocol TrackersView: UIView {
     var delegate: TrackersViewDelegate? { get set }
 
     func setView()
+    func updateCollection()
     func updateVisibleCategories(newVisibleCategories: [TrackerCategory])
-    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder)
+    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder, isHiddenButton: Bool)
 }
 
 protocol TrackersViewDelegate: AnyObject {
-    func enableDoneButton(completion: (Bool) -> ())
+    func reloadData(isFilter: Bool, isHiddenButton: Bool)
     func reloadVisibleCategories(text: String?)
+    func enableDoneButton(completion: (Bool) -> ())
     func isTrackerCompleteToday(trackerId: UUID) -> Bool
     func countCompletedTracker(trackerId: UUID) -> Int
+    func pinTracker(trackerId: UUID?)
+    func filterDidTap()
 }
 
 final class TrackersViewImp: UIView, TrackersView {
@@ -47,7 +52,7 @@ final class TrackersViewImp: UIView, TrackersView {
         search.layer.cornerRadius = 16
         search.returnKeyType = .done
         search.attributedPlaceholder = NSAttributedString(
-            string: "Поиск",
+            string: NSLocalizedString("main.find", comment: "Text displayed on tracker"),
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.trackerGray]
         )
         search.delegate = self
@@ -56,7 +61,7 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private lazy var cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("main.cancel", comment: "Text displayed on tracker"), for: .normal)
         button.tintColor = .trackerBlue
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         button.isHidden = true
@@ -86,7 +91,7 @@ final class TrackersViewImp: UIView, TrackersView {
 
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         return label
     }()
@@ -103,6 +108,18 @@ final class TrackersViewImp: UIView, TrackersView {
         return stackView
     }()
 
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(NSLocalizedString("main.filters", comment: "Text displayed on tracker"), for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = .trackerBlue
+        button.setTitleColor(.trackerFontWhite, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.addTarget(self, action: #selector(filtersDidTap), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
     func setView() {
         backgroundColor = .trackerWhite
         collectionView.dataSource = self
@@ -111,6 +128,7 @@ final class TrackersViewImp: UIView, TrackersView {
         addSubview(searchStackView)
         addSubview(placeholderStackView)
         addSubview(collectionView)
+        addSubview(filterButton)
 
         NSLayoutConstraint.activate([
             searchStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -124,13 +142,22 @@ final class TrackersViewImp: UIView, TrackersView {
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: searchStackView.bottomAnchor, constant: 34),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
 
-        didHiddenPlaceholder(placeholder: Placeholder.emptyCategories)
+        didHiddenPlaceholder(placeholder: visibleCategories.isEmpty ? .emptyCategories : .notFoundCategories)
 
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         addGestureRecognizer(recognizer)
+    }
+
+    func updateCollection() {
+        collectionView.contentInset.bottom = filterButton.frame.height
     }
 
     func updateVisibleCategories(newVisibleCategories: [TrackerCategory]) {
@@ -139,9 +166,10 @@ final class TrackersViewImp: UIView, TrackersView {
 
     // MARK: - Private methods
 
-    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder) {
+    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder, isHiddenButton: Bool) {
         visibleCategories = newCategories
         didHiddenPlaceholder(placeholder: placeholder)
+        filterButton.isHidden = isHiddenButton
         collectionView.reloadData()
     }
 
@@ -151,11 +179,16 @@ final class TrackersViewImp: UIView, TrackersView {
         switch placeholder {
         case .emptyCategories:
             placeholderImageView.image = UIImage(named: "PlaceholderTracker")
-            placeholderLabel.text = "Что будем отслеживать?"
+            placeholderLabel.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
         case .notFoundCategories:
             placeholderImageView.image = UIImage(named: "SearchPlaceholder")
-            placeholderLabel.text = "Ничего не найдено"
+            placeholderLabel.text = NSLocalizedString("main.emptyFind", comment: "Text displayed on tracker")
         }
+    }
+
+    @objc private func filtersDidTap() {
+        delegate?.filterDidTap()
+        YMMYandexMetrica.reportEvent("click", parameters: ["screen": "Main", "item": "filter"])
     }
 
     @objc private func viewDidTap() {
@@ -166,6 +199,7 @@ final class TrackersViewImp: UIView, TrackersView {
         searchTextField.resignFirstResponder()
         searchTextField.text = ""
         delegate?.reloadVisibleCategories(text: nil)
+        delegate?.reloadData(isFilter: false, isHiddenButton: visibleCategories.isEmpty)
     }
 }
 
@@ -210,8 +244,10 @@ extension TrackersViewImp: UICollectionViewDataSource {
                 name: tracker.name,
                 color: tracker.color,
                 emoji: tracker.emoji,
-                schedule: tracker.schedule
+                schedule: tracker.schedule,
+                isFixed: tracker.isFixed
             ),
+            category: visibleCategories[indexPath.section].title,
             isDoneToday: isDone,
             completedDays: count,
             indexPath: indexPath
@@ -237,7 +273,6 @@ extension TrackersViewImp: UICollectionViewDataSource {
         }
 
         headerView.configure(text: visibleCategories[indexPath.section].title)
-//        headerView.titleLabel.text = visibleCategories[indexPath.section].title
         return headerView
     }
 }
@@ -245,8 +280,6 @@ extension TrackersViewImp: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension TrackersViewImp: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
-
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -301,6 +334,8 @@ extension TrackersViewImp: UITextFieldDelegate {
         let text = (searchTextField.text ?? "").lowercased()
         searchTextField.resignFirstResponder()
         delegate?.reloadVisibleCategories(text: text)
+        delegate?.reloadData(isFilter: false, isHiddenButton: visibleCategories.isEmpty)
+        filterButton.isHidden = visibleCategories.isEmpty
         return true
     }
 }

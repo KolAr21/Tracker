@@ -23,7 +23,7 @@ final class CreateTrackerViewController<View: CreateTrackerView>: BaseViewContro
     // MARK: - Private methods
 
     private func setupBar() {
-        title = "Создание трекера"
+        title = NSLocalizedString("createTracker.title", comment: "Text displayed on tracker")
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)

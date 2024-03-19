@@ -1,0 +1,65 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Арина Колганова on 24.02.2024.
+  
+*/
+
+"onboarding.firstPage" = "Track only what you want";
+"onboarding.secondPage" = "Even if it's not liters of water and yoga";
+"onboarding.button" = "These are technologies!";
+
+"statistic.empty" = "There is nothing to analyze yet";
+"statistic.period" = "The best period";
+"statistic.day" = "Perfect days";
+"statistic.complete" = "Trackers completed";
+"statistic.median" = "The average value";
+
+"main.title" = "Trackers";
+"main.empty" = "What are we going to track?";
+"main.emptyFind" = "Nothing was found";
+"main.find" = "Find";
+"main.cancel" = "Cancel";
+"main.filters" = "Filters";
+
+"filters.all" = "All complete";
+"filters.today" = "Trackers for today";
+"filters.complete" = "Completed";
+"filters.uncomplete" = "Not completed";
+
+"navigation.trackers" = "Trackers";
+"navigation.statistic" = "Statistics";
+
+"createTracker.title" = "Creating a tracker";
+"createTracker.habit" = "Habit";
+"createTracker.event" = "Irregular events";
+
+"tracker.unpin" = "Unpin";
+"tracker.pin" = "Pin";
+"tracker.edit" = "Edit";
+"tracker.delete" = "Delete";
+"tracker.category" = "Fixed";
+
+"newHabit.titleFirst" = "New habit";
+"newHabit.titleSecond" = "New irregular event";
+"newHabit.titleThird" = "Edit habit";
+"newHabit.namePlaceholder" = "Enter the name of the tracker";
+"newHabit.nameWarning" = "The limit is 38 characters";
+"newHabit.emoji" = "Emoji";
+"newHabit.color" = "Color";
+"newHabit.everyDay" = "Every day";
+"newHabit.cancel" = "Cancel";
+"newHabit.create" = "Create";
+"newHabit.save" = "Save";
+
+"category.title" = "Category";
+"category.empty" = "Habits and events can be combined in meaning";
+"category.button" = "Add a category";
+
+"newCategory.title" = "New category";
+"newCategory.namePlaceholder" = "Enter the name of the category";
+"newCategory.button" = "Done";
+
+"schedule.title" = "Schedule";
+"schedule.button" = "Done";

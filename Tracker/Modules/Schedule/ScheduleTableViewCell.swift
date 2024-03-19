@@ -16,7 +16,7 @@ final class ScheduleTableViewCell: UITableViewCell {
 
     private lazy var label: UILabel = {
         let label = UILabel()
-        label.textColor = .trackerBlack
+        label.textColor = .trackerFontBlack
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return label
     }()

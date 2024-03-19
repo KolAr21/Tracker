@@ -10,10 +10,11 @@ import UIKit
 final class NewHabitCoordinator: BaseCoordinator<NewHabitCoordinator.Context> {
     struct Context {
         let parameters: [String]
+        let model: TrackerModel?
     }
 
     override func make() -> UIViewController? {
-        let controller = assembly.newHabitVC(parameters: context.parameters)
+        let controller = assembly.newHabitVC(parameters: context.parameters, model: context.model)
         controller.onOpenSchedule = { [weak controller] in
             let coordinator = self.assembly.scheduleCoordinator()
             guard let scheduleVC = coordinator.make() else {

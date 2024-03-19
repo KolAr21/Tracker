@@ -8,16 +8,16 @@
 import UIKit
 
 protocol NewHabitAssembly {
-    func newHabitCoordinator(parameters: [String]) -> NewHabitCoordinator
-    func newHabitVC(parameters: [String]) -> NewHabitViewController<NewHabitViewImp>
+    func newHabitCoordinator(parameters: [String], model: TrackerModel?) -> NewHabitCoordinator
+    func newHabitVC(parameters: [String], model: TrackerModel?) -> NewHabitViewController<NewHabitViewImp>
 }
 
 extension Assembly: NewHabitAssembly {
-    func newHabitCoordinator(parameters: [String]) -> NewHabitCoordinator {
-        NewHabitCoordinator(assembly: self, context: .init(parameters: parameters))
+    func newHabitCoordinator(parameters: [String], model: TrackerModel?) -> NewHabitCoordinator {
+        NewHabitCoordinator(assembly: self, context: .init(parameters: parameters, model: model))
     }
 
-    func newHabitVC(parameters: [String]) -> NewHabitViewController<NewHabitViewImp> {
-        .init(parameters: parameters, dataProvider: dataProvider)
+    func newHabitVC(parameters: [String], model: TrackerModel?) -> NewHabitViewController<NewHabitViewImp> {
+        .init(parameters: parameters, model: model, dataProvider: dataProvider)
     }
 }

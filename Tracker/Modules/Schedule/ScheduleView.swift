@@ -39,7 +39,7 @@ final class ScheduleViewImp: UIView, ScheduleView {
         button.backgroundColor = .trackerBlack
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("schedule.button", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +72,8 @@ final class ScheduleViewImp: UIView, ScheduleView {
 
     @objc private func didTapDoneButton() {
         for row in 0..<tableView.numberOfRows(inSection: 0) {
-            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ScheduleTableViewCell else {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? ScheduleTableViewCell
+            else {
                 return
             }
             if cell.switcher.isOn {

@@ -14,9 +14,9 @@ enum Page: Int {
     var title: String? {
         switch self {
         case .first:
-            return "Отслеживайте только то, что хотите"
+            return NSLocalizedString("onboarding.firstPage", comment: "Text displayed on onboarding")
         case .second:
-            return "Даже если это \n не литры воды и йога"
+            return NSLocalizedString("onboarding.secondPage", comment: "Text displayed on onboarding")
         }
     }
 

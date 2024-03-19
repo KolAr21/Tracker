@@ -28,6 +28,7 @@ final class OnboardingViewImp: UIView, OnboardingView {
         let label = UILabel()
         label.text = parameter?.title
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textColor = .trackerBlack
         label.numberOfLines = 2
         label.textAlignment = .center
         return label
@@ -35,11 +36,11 @@ final class OnboardingViewImp: UIView, OnboardingView {
 
     private lazy var trackerButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboarding.button", comment: "Text displayed on onboarding"), for: .normal)
         button.backgroundColor = .trackerBlack
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.setTitleColor(.trackerWhite, for: .normal)
+        button.setTitleColor(.trackerFontWhite, for: .normal)
         button.addTarget(self, action: #selector(openTracker), for: .touchUpInside)
         return button
     }()

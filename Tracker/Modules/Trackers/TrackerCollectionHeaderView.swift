@@ -11,7 +11,7 @@ final class TrackerCollectionHeaderView: UICollectionReusableView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .trackerBlack
+        label.textColor = .trackerFontBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

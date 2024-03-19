@@ -18,7 +18,7 @@ final class CategoryViewController: UIViewController {
 
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Привычки и события можно\n объединить по смыслу"
+        label.text = NSLocalizedString("category.empty", comment: "Text displayed on tracker")
         label.textAlignment = .center
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -48,10 +48,10 @@ final class CategoryViewController: UIViewController {
 
     private lazy var addButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .trackerBlack
+        button.backgroundColor = .trackerFontBlack
         button.layer.cornerRadius = 16
         button.setTitleColor(.trackerWhite, for: .normal)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("category.button", comment: "Text displayed on tracker"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
         return button
@@ -115,7 +115,7 @@ final class CategoryViewController: UIViewController {
     }
 
     private func setupBar() {
-        title = "Категория"
+        title = NSLocalizedString("category.title", comment: "Text displayed on tracker")
         navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.trackerBlack,
             .font: UIFont.systemFont(ofSize: 16, weight: .medium)
