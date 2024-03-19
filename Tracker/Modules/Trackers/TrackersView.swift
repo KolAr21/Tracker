@@ -179,11 +179,11 @@ final class TrackersViewImp: UIView, TrackersView {
         case .emptyCategories:
             placeholderImageView.image = UIImage(named: "PlaceholderTracker")
             placeholderLabel.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
-            filterButton.isHidden = false
+            filterButton.isHidden = visibleCategories.isEmpty
         case .notFoundCategories:
             placeholderImageView.image = UIImage(named: "SearchPlaceholder")
             placeholderLabel.text = NSLocalizedString("main.emptyFind", comment: "Text displayed on tracker")
-            filterButton.isHidden = visibleCategories.isEmpty
+            filterButton.isHidden = false
         }
     }
 
