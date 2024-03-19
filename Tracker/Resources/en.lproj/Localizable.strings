@@ -10,6 +10,7 @@
 "onboarding.secondPage" = "Even if it's not liters of water and yoga";
 "onboarding.button" = "These are technologies!";
 
+"statistic.empty" = "There is nothing to analyze yet";
 "statistic.period" = "The best period";
 "statistic.day" = "Perfect days";
 "statistic.complete" = "Trackers completed";

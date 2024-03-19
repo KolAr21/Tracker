@@ -10,6 +10,7 @@ import YandexMobileMetrica
 
 final class TrackersViewController<View: TrackersView>: BaseViewController<View> {
     var completedTrackers: [TrackerRecord] = []
+    var allCategories: [TrackerCategory] = []
     var categories: [TrackerCategory] = []
     var openCreateTracker: (() -> Void)?
     var openEditHabitClosure: ((TrackerModel) -> Void)?
@@ -50,13 +51,12 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        convertCoreDataInModel()
-        datePickerValueChanged()
         setupBar()
         fetchTrackerRecord()
 
         rootView.delegate = self
         rootView.setView()
+        updateTrackers()
 
         trackersObserver = NotificationCenter.default.addObserver(
             forName: DataProvider.DidChangeCategoriesNotification,
@@ -90,26 +90,30 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
             datePicker.date = Date()
         }
         convertCoreDataInModel()
-        reloadVisibleCategories(text: nil)
 
-        if !categories.isEmpty {
-            switch filter {
-            case .all:
-                break
-            case .today:
-                dataProvider.updateFilter(filter: .all)
-                datePickerValueChanged()
-            case .complete:
-                updateVisibleTracker(isComplete: true)
-            case .uncomplete:
-                updateVisibleTracker(isComplete: false)
+        if !allCategories.isEmpty {
+            reloadVisibleCategories(text: nil)
+            if !categories.isEmpty {
+                switch filter {
+                case .all:
+                    break
+                case .today:
+                    dataProvider.updateFilter(filter: .all)
+                    datePickerValueChanged()
+                case .complete:
+                    updateVisibleTracker(isComplete: true)
+                case .uncomplete:
+                    updateVisibleTracker(isComplete: false)
+                }
+                reloadData(isFilter: true, isHiddenButton: false)
+            } else {
+                if filter == .today {
+                    dataProvider.updateFilter(filter: .all)
+                }
+                reloadData(isFilter: true, isHiddenButton: true)
             }
-            reloadData(isFilter: true)
         } else {
-            if filter == .today {
-                dataProvider.updateFilter(filter: .all)
-            }
-            reloadData(isFilter: false)
+            reloadData(isFilter: false, isHiddenButton: true)
         }
     }
 
@@ -140,7 +144,7 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 
     private func convertCoreDataInModel() {
         var categoryList: [Tracker] = []
-        categories = dataProvider.trackerCategories.compactMap { category -> TrackerCategory? in
+        allCategories = dataProvider.trackerCategories.compactMap { category -> TrackerCategory? in
             guard let title = category.title, let trackers = category.trackers else {
                 return nil
             }
@@ -224,10 +228,11 @@ final class TrackersViewController<View: TrackersView>: BaseViewController<View>
 // MARK: - TrackersViewDelegate
 
 extension TrackersViewController: TrackersViewDelegate {
-    func reloadData(isFilter: Bool) {
+    func reloadData(isFilter: Bool, isHiddenButton: Bool) {
         rootView.reloadData(
             newCategories: categories,
-            placeholder: isFilter ? .notFoundCategories : .emptyCategories
+            placeholder: !allCategories.isEmpty ? .notFoundCategories : .emptyCategories,
+            isHiddenButton: isHiddenButton
         )
     }
 
@@ -235,7 +240,7 @@ extension TrackersViewController: TrackersViewDelegate {
         let index = Calendar.current.component(.weekday, from: datePicker.date)
         var sortedCategories: [TrackerCategory] = []
 
-        for category in categories {
+        for category in allCategories {
             let sortedTrackerList = category.trackersList.filter {
                 text != nil ?
                 $0.name.lowercased().contains(text ?? "") && $0.schedule.contains(Weekday.allCases[index - 1]) :

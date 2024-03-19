@@ -14,11 +14,11 @@ protocol TrackersView: UIView {
     func setView()
     func updateCollection()
     func updateVisibleCategories(newVisibleCategories: [TrackerCategory])
-    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder)
+    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder, isHiddenButton: Bool)
 }
 
 protocol TrackersViewDelegate: AnyObject {
-    func reloadData(isFilter: Bool)
+    func reloadData(isFilter: Bool, isHiddenButton: Bool)
     func reloadVisibleCategories(text: String?)
     func enableDoneButton(completion: (Bool) -> ())
     func isTrackerCompleteToday(trackerId: UUID) -> Bool
@@ -150,7 +150,7 @@ final class TrackersViewImp: UIView, TrackersView {
             filterButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
 
-        didHiddenPlaceholder(placeholder: Placeholder.emptyCategories)
+        didHiddenPlaceholder(placeholder: visibleCategories.isEmpty ? .emptyCategories : .notFoundCategories)
 
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(viewDidTap))
         addGestureRecognizer(recognizer)
@@ -166,9 +166,10 @@ final class TrackersViewImp: UIView, TrackersView {
 
     // MARK: - Private methods
 
-    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder) {
+    func reloadData(newCategories: [TrackerCategory], placeholder: Placeholder, isHiddenButton: Bool) {
         visibleCategories = newCategories
         didHiddenPlaceholder(placeholder: placeholder)
+        filterButton.isHidden = isHiddenButton
         collectionView.reloadData()
     }
 
@@ -179,11 +180,9 @@ final class TrackersViewImp: UIView, TrackersView {
         case .emptyCategories:
             placeholderImageView.image = UIImage(named: "PlaceholderTracker")
             placeholderLabel.text = NSLocalizedString("main.empty", comment: "Text displayed on tracker")
-            filterButton.isHidden = visibleCategories.isEmpty
         case .notFoundCategories:
             placeholderImageView.image = UIImage(named: "SearchPlaceholder")
             placeholderLabel.text = NSLocalizedString("main.emptyFind", comment: "Text displayed on tracker")
-            filterButton.isHidden = false
         }
     }
 
@@ -200,7 +199,7 @@ final class TrackersViewImp: UIView, TrackersView {
         searchTextField.resignFirstResponder()
         searchTextField.text = ""
         delegate?.reloadVisibleCategories(text: nil)
-        delegate?.reloadData(isFilter: false)
+        delegate?.reloadData(isFilter: false, isHiddenButton: visibleCategories.isEmpty)
     }
 }
 
@@ -335,7 +334,8 @@ extension TrackersViewImp: UITextFieldDelegate {
         let text = (searchTextField.text ?? "").lowercased()
         searchTextField.resignFirstResponder()
         delegate?.reloadVisibleCategories(text: text)
-        delegate?.reloadData(isFilter: false)
+        delegate?.reloadData(isFilter: false, isHiddenButton: visibleCategories.isEmpty)
+        filterButton.isHidden = visibleCategories.isEmpty
         return true
     }
 }

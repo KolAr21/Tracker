@@ -46,6 +46,29 @@ final class StatisticViewImp: UIView, StatisticView {
         return collectionView
     }()
 
+    private lazy var placeholderImageView: UIImageView = {
+        UIImageView(image: UIImage(named: "PlaceholderStatistic"))
+    }()
+
+    private lazy var placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString("statistic.empty", comment: "Text displayed on tracker")
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        return label
+    }()
+
+    private lazy var placeholderStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = NSLayoutConstraint.Axis.vertical
+        stackView.distribution = UIStackView.Distribution.equalSpacing
+        stackView.alignment = UIStackView.Alignment.center
+        stackView.spacing = 8
+        stackView.addArrangedSubview(placeholderImageView)
+        stackView.addArrangedSubview(placeholderLabel)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     func setView() {
         closures = [
             delegate?.setCountBestPeriod,
@@ -54,16 +77,24 @@ final class StatisticViewImp: UIView, StatisticView {
             delegate?.setMedian
         ]
         addSubview(collectionView)
+        addSubview(placeholderStackView)
 
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             collectionView.topAnchor.constraint(equalTo: topAnchor, constant: 70),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+
+            placeholderStackView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            placeholderStackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor)
         ])
+        placeholderStackView.isHidden = !(Int(delegate?.setCountCompletedTracker() ?? "0") == 0)
+        collectionView.isHidden = (Int(delegate?.setCountCompletedTracker() ?? "0") == 0)
     }
 
     func reload() {
+        placeholderStackView.isHidden = !(Int(delegate?.setCountCompletedTracker() ?? "0") == 0)
+        collectionView.isHidden = (Int(delegate?.setCountCompletedTracker() ?? "0") == 0)
         collectionView.reloadData()
     }
 }

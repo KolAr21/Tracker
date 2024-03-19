@@ -10,6 +10,7 @@
 "onboarding.secondPage" = "Даже если это не литры воды и йога";
 "onboarding.button" = "Вот это технологии!";
 
+"statistic.empty" = "Анализировать пока нечего";
 "statistic.period" = "Лучший период";
 "statistic.day" = "Идеальные дни";
 "statistic.complete" = "Трекеров завершено";
